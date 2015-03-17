@@ -28,7 +28,7 @@ namespace ProjetAppWCF_Interface2037
         public override void Creer(HttpContext context)
         {
             throw new NotImplementedException();
-        }
+        } 
 
         public override void Consulter(HttpContext context)
         {

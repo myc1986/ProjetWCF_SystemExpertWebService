@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="web_serviceModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="web_serviceModelStoreContainer">
+          <EntitySet Name="questions" EntityType="web_serviceModel.Store.questions" store:Type="Tables" Schema="web_service" />
+          <EntitySet Name="reponses" EntityType="web_serviceModel.Store.reponses" store:Type="Tables" Schema="web_service" />
+        </EntityContainer>
+        <EntityType Name="questions">
+          <Key>
+            <PropertyRef Name="id_question" />
+          </Key>
+          <Property Name="id_question" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="question" Type="varchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="reponses">
+          <Key>
+            <PropertyRef Name="id_reponse" />
+          </Key>
+          <Property Name="id_reponse" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="reponse" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="fid_question" Type="int" Nullable="false" />
+        </EntityType>
+        <Function Name="AjouterQuestion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="web_service">
+          <Parameter Name="p_question" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AjouterReponse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="web_service">
+          <Parameter Name="p_reponse" Type="varchar" Mode="In" />
+          <Parameter Name="p_fid_question" Type="int" Mode="In" />
+        </Function>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="web_serviceModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="web_serviceEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="questions" EntityType="web_serviceModel.EntiteQuestion" />
+          <EntitySet Name="reponses" EntityType="web_serviceModel.EntiteReponse" />
+          <FunctionImport Name="AjouterQuestion">
+            <Parameter Name="p_question" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AjouterReponse">
+            <Parameter Name="p_reponse" Mode="In" Type="String" />
+            <Parameter Name="p_fid_question" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="EntiteQuestion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="question" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="EntiteReponse">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="reponse" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="fid_question" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="web_serviceModelStoreContainer" CdmEntityContainer="web_serviceEntities">
+          <EntitySetMapping Name="questions">
+            <EntityTypeMapping TypeName="web_serviceModel.EntiteQuestion">
+              <MappingFragment StoreEntitySet="questions">
+                <ScalarProperty Name="id" ColumnName="id_question" />
+                <ScalarProperty Name="question" ColumnName="question" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reponses">
+            <EntityTypeMapping TypeName="web_serviceModel.EntiteReponse">
+              <MappingFragment StoreEntitySet="reponses">
+                <ScalarProperty Name="id" ColumnName="id_reponse" />
+                <ScalarProperty Name="reponse" ColumnName="reponse" />
+                <ScalarProperty Name="fid_question" ColumnName="fid_question" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AjouterQuestion" FunctionName="web_serviceModel.Store.AjouterQuestion" />
+          <FunctionImportMapping FunctionImportName="AjouterReponse" FunctionName="web_serviceModel.Store.AjouterReponse" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

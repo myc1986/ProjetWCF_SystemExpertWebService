@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetAppWCF_Interface2037", "ProjetAppWCF_Interface2037\ProjetAppWCF_Interface2037.csproj", "{2325F3C0-ACF1-4D17-9F22-A964536EEC2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2325F3C0-ACF1-4D17-9F22-A964536EEC2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2325F3C0-ACF1-4D17-9F22-A964536EEC2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2325F3C0-ACF1-4D17-9F22-A964536EEC2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2325F3C0-ACF1-4D17-9F22-A964536EEC2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

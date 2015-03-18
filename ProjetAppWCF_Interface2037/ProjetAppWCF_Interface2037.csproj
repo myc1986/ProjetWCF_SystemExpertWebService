@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,7 +41,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -70,26 +73,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntiteQuestion.cs">
-      <DependentUpon>modelSystemExpert.tt</DependentUpon>
+      <DependentUpon>ModelSystemExpert.tt</DependentUpon>
     </Compile>
     <Compile Include="EntiteReponse.cs">
-      <DependentUpon>modelSystemExpert.tt</DependentUpon>
+      <DependentUpon>ModelSystemExpert.tt</DependentUpon>
     </Compile>
     <Compile Include="IRessource.cs" />
-    <Compile Include="modelSystemExpert.Context.cs">
+    <Compile Include="ModelSystemExpert.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>modelSystemExpert.Context.tt</DependentUpon>
+      <DependentUpon>ModelSystemExpert.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="modelSystemExpert.cs">
+    <Compile Include="ModelSystemExpert.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>modelSystemExpert.tt</DependentUpon>
+      <DependentUpon>ModelSystemExpert.tt</DependentUpon>
     </Compile>
-    <Compile Include="modelSystemExpert.Designer.cs">
+    <Compile Include="ModelSystemExpert.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>modelSystemExpert.edmx</DependentUpon>
+      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
     </Compile>
     <Compile Include="Question.cs" />
     <Compile Include="Reponse.cs" />
@@ -106,22 +109,22 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="modelSystemExpert.edmx">
+    <EntityDeploy Include="ModelSystemExpert.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>modelSystemExpert.Designer.cs</LastGenOutput>
+      <LastGenOutput>ModelSystemExpert.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="modelSystemExpert.Context.tt">
+    <Content Include="ModelSystemExpert.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>modelSystemExpert.edmx</DependentUpon>
-      <LastGenOutput>modelSystemExpert.Context.cs</LastGenOutput>
+      <LastGenOutput>ModelSystemExpert.Context.cs</LastGenOutput>
+      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
     </Content>
-    <Content Include="modelSystemExpert.edmx.diagram">
-      <DependentUpon>modelSystemExpert.edmx</DependentUpon>
+    <Content Include="ModelSystemExpert.edmx.diagram">
+      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
     </Content>
-    <Content Include="modelSystemExpert.tt">
+    <Content Include="ModelSystemExpert.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>modelSystemExpert.edmx</DependentUpon>
-      <LastGenOutput>modelSystemExpert.cs</LastGenOutput>
+      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
+      <LastGenOutput>ModelSystemExpert.cs</LastGenOutput>
     </Content>
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
@@ -159,6 +162,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

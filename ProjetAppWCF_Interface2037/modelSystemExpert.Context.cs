@@ -16,10 +16,10 @@ namespace ProjetAppWCF_Interface2037
     using System.Data.Objects.DataClasses;
     using System.Linq;
     
-    public partial class web_serviceEntities : DbContext
+    public partial class web_serviceSystemExpert : DbContext
     {
-        public web_serviceEntities()
-            : base("name=web_serviceEntities")
+        public web_serviceSystemExpert()
+            : base("name=web_serviceSystemExpert")
         {
         }
     

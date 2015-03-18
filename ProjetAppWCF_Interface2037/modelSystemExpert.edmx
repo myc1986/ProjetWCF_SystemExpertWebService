@@ -36,7 +36,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="web_serviceModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="web_serviceEntities" p1:LazyLoadingEnabled="true">
+        <EntityContainer Name="web_serviceSystemExpert" p1:LazyLoadingEnabled="true">
           <EntitySet Name="questions" EntityType="web_serviceModel.EntiteQuestion" />
           <EntitySet Name="reponses" EntityType="web_serviceModel.EntiteReponse" />
           <FunctionImport Name="AjouterQuestion">
@@ -67,7 +67,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="web_serviceModelStoreContainer" CdmEntityContainer="web_serviceEntities">
+        <EntityContainerMapping StorageEntityContainer="web_serviceModelStoreContainer" CdmEntityContainer="web_serviceSystemExpert">
           <EntitySetMapping Name="questions">
             <EntityTypeMapping TypeName="web_serviceModel.EntiteQuestion">
               <MappingFragment StoreEntitySet="questions">

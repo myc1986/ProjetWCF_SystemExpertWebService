@@ -61,6 +61,34 @@ namespace ProjetAppWCF_Interface2037.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à -- phpMyAdmin SQL Dump
+        ///-- version 4.1.14
+        ///-- http://www.phpmyadmin.net
+        ///--
+        ///-- Client :  127.0.0.1
+        ///-- Généré le :  Mar 31 Mars 2015 à 16:53
+        ///-- Version du serveur :  5.6.17
+        ///-- Version de PHP :  5.5.12
+        ///
+        ///SET SQL_MODE = &quot;NO_AUTO_VALUE_ON_ZERO&quot;;
+        ///SET time_zone = &quot;+00:00&quot;;
+        ///
+        ///
+        ////*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+        ////*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+        ////*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+        ////*!40101 SET NAMES utf8 */;
+        ///
+        ///--
+        ///-- Base de don [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string bdd_service_web {
+            get {
+                return ResourceManager.GetString("bdd_service_web", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une ressource localisée de type System.Byte[].
         /// </summary>
         internal static byte[] Newtonsoft_Json {

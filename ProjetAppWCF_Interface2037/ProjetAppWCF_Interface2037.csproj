@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2325F3C0-ACF1-4D17-9F22-A964536EEC2A}</ProjectGuid>
+    <ProjectGuid>{CFB239DF-4F82-47E8-A4DB-11DD916E31D0}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -31,6 +31,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -68,34 +69,30 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Newtonsoft.Json.dll" />
+    <None Include="Resources\Newtonsoft.Json.pdb" />
+    <None Include="Resources\Newtonsoft.Json.xml" />
     <Content Include="Service1.svc" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntiteQuestion.cs">
-      <DependentUpon>ModelSystemExpert.tt</DependentUpon>
+      <DependentUpon>SystemExpert.tt</DependentUpon>
     </Compile>
     <Compile Include="EntiteReponse.cs">
-      <DependentUpon>ModelSystemExpert.tt</DependentUpon>
+      <DependentUpon>SystemExpert.tt</DependentUpon>
     </Compile>
     <Compile Include="IRessource.cs" />
-    <Compile Include="ModelSystemExpert.Context.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelSystemExpert.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ModelSystemExpert.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelSystemExpert.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ModelSystemExpert.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Question.cs" />
     <Compile Include="Reponse.cs" />
+    <Compile Include="RepresentationFactory.cs" />
     <Compile Include="Ressource.cs" />
     <Compile Include="RessourceFactory.cs" />
     <Compile Include="RestServiceWebSystemExpert.cs" />
@@ -104,29 +101,45 @@
     </Compile>
     <Compile Include="IService1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemExpert.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SystemExpert.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemExpert.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SystemExpert.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemExpert.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SystemExpert.edmx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="ModelSystemExpert.edmx">
+    <EntityDeploy Include="SystemExpert.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelSystemExpert.Designer.cs</LastGenOutput>
+      <LastGenOutput>SystemExpert.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="ModelSystemExpert.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ModelSystemExpert.Context.cs</LastGenOutput>
-      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
-    </Content>
-    <Content Include="ModelSystemExpert.edmx.diagram">
-      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
-    </Content>
-    <Content Include="ModelSystemExpert.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelSystemExpert.edmx</DependentUpon>
-      <LastGenOutput>ModelSystemExpert.cs</LastGenOutput>
-    </Content>
     <Content Include="packages.config" />
+    <Content Include="SystemExpert.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SystemExpert.Context.cs</LastGenOutput>
+      <DependentUpon>SystemExpert.edmx</DependentUpon>
+    </Content>
+    <Content Include="SystemExpert.edmx.diagram">
+      <DependentUpon>SystemExpert.edmx</DependentUpon>
+    </Content>
+    <Content Include="SystemExpert.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SystemExpert.edmx</DependentUpon>
+      <LastGenOutput>SystemExpert.cs</LastGenOutput>
+    </Content>
+    <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -136,6 +149,15 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -148,15 +170,14 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>15875</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:3461/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <CustomServerUrl>http://192.168.8.67/</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

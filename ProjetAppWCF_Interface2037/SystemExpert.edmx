@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="bdd_service_webModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="bdd_service_webModelStoreContainer">
+          <EntitySet Name="questions" EntityType="bdd_service_webModel.Store.questions" store:Type="Tables" Schema="bdd_service_web" />
+          <EntitySet Name="reponses" EntityType="bdd_service_webModel.Store.reponses" store:Type="Tables" Schema="bdd_service_web" />
+          <AssociationSet Name="FK_REPONSE_QUESTION" Association="bdd_service_webModel.Store.FK_REPONSE_QUESTION">
+            <End Role="questions" EntitySet="questions" />
+            <End Role="reponses" EntitySet="reponses" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="questions">
+          <Key>
+            <PropertyRef Name="question_id" />
+          </Key>
+          <Property Name="question_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="question_contenu" Type="varchar" Nullable="false" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="reponses">
+          <Key>
+            <PropertyRef Name="reponse_id" />
+          </Key>
+          <Property Name="reponse_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="reponse_contenu" Type="varchar" Nullable="false" MaxLength="500" />
+          <Property Name="question_fid" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_REPONSE_QUESTION">
+          <End Role="questions" Type="bdd_service_webModel.Store.questions" Multiplicity="1" />
+          <End Role="reponses" Type="bdd_service_webModel.Store.reponses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="questions">
+              <PropertyRef Name="question_id" />
+            </Principal>
+            <Dependent Role="reponses">
+              <PropertyRef Name="question_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AjouterQuestion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="bdd_service_web">
+          <Parameter Name="p_question_contenu" Type="varchar" Mode="In" />
+        </Function>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bdd_service_webModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="bdd_service_web" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="questions" EntityType="bdd_service_webModel.EntiteQuestion" />
+          <EntitySet Name="reponses" EntityType="bdd_service_webModel.EntiteReponse" />
+          <AssociationSet Name="FK_REPONSE_QUESTION" Association="bdd_service_webModel.FK_REPONSE_QUESTION">
+            <End Role="questions" EntitySet="questions" />
+            <End Role="reponses" EntitySet="reponses" />
+          </AssociationSet>
+          <FunctionImport Name="AjouterQuestion">
+            <Parameter Name="p_question_contenu" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="EntiteQuestion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Contenu" Type="String" Nullable="false" MaxLength="500" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="reponses" Relationship="bdd_service_webModel.FK_REPONSE_QUESTION" FromRole="questions" ToRole="reponses" />
+        </EntityType>
+        <EntityType Name="EntiteReponse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Contenu" Type="String" Nullable="false" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="question_fid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="questions" Relationship="bdd_service_webModel.FK_REPONSE_QUESTION" FromRole="reponses" ToRole="questions" />
+        </EntityType>
+        <Association Name="FK_REPONSE_QUESTION">
+          <End Role="questions" Type="bdd_service_webModel.EntiteQuestion" Multiplicity="1" />
+          <End Role="reponses" Type="bdd_service_webModel.EntiteReponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="questions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="reponses">
+              <PropertyRef Name="question_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bdd_service_webModelStoreContainer" CdmEntityContainer="bdd_service_web">
+          <EntitySetMapping Name="questions">
+            <EntityTypeMapping TypeName="bdd_service_webModel.EntiteQuestion">
+              <MappingFragment StoreEntitySet="questions">
+                <ScalarProperty Name="Id" ColumnName="question_id" />
+                <ScalarProperty Name="Contenu" ColumnName="question_contenu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reponses">
+            <EntityTypeMapping TypeName="bdd_service_webModel.EntiteReponse">
+              <MappingFragment StoreEntitySet="reponses">
+                <ScalarProperty Name="Id" ColumnName="reponse_id" />
+                <ScalarProperty Name="Contenu" ColumnName="reponse_contenu" />
+                <ScalarProperty Name="question_fid" ColumnName="question_fid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AjouterQuestion" FunctionName="bdd_service_webModel.Store.AjouterQuestion" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

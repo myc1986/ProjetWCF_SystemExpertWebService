@@ -19,7 +19,7 @@ namespace ProjetAppWCF_Interface2037
 
         public void ProcessRequest(HttpContext context)
         {
-            Ressource maRessource = RessourceFactory.Fabriquer(context);
+            IRessource maRessource = RessourceFactory.Fabriquer(context);
 
             switch (context.Request.HttpMethod)
             {
@@ -38,6 +38,8 @@ namespace ProjetAppWCF_Interface2037
                 default:
                     break;
             }
+
+            context.Response.Write(maRessource.GetString());
         }
     }
 }

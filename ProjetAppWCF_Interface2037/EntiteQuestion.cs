@@ -14,7 +14,14 @@ namespace ProjetAppWCF_Interface2037
     
     public partial class EntiteQuestion
     {
-        public int id { get; set; }
-        public string question { get; set; }
+        public EntiteQuestion()
+        {
+            this.reponses = new HashSet<EntiteReponse>();
+        }
+    
+        public int Id { get; set; }
+        public string Contenu { get; set; }
+    
+        public virtual ICollection<EntiteReponse> reponses { get; set; }
     }
 }

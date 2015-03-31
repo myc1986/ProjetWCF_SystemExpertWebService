@@ -29,5 +29,30 @@ namespace ProjetAppWCF_Interface2037
         /// </summary>
         /// <param name="context"></param>
         void MiseAJour(HttpContext context);
+
+        /// <summary>
+        /// Retourne une représentation de la ressource celon le context http (content-type)
+        /// </summary>
+        /// <returns></returns>
+        string GetString();
+
+        /// <summary>
+        /// Retourne une représentation de la ressource fixé par le paramètre d'entrée format de representation
+        /// </summary>
+        /// <param name="formatRepresentationRessource"></param>
+        /// <returns></returns>
+        string GetString(string formatRepresentationRessource);
+
+        /// <summary>
+        /// Retourne le nom de la classe de la ressource
+        /// </summary>
+        /// <returns></returns>
+        string GetNameClass();
+
+        /// <summary>
+        /// retourne le contenu de la ressource. N'inclus pas les sous ressources
+        /// </summary>
+        /// <returns></returns>
+        string GetContenu();
     }
 }

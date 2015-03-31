@@ -14,8 +14,10 @@ namespace ProjetAppWCF_Interface2037
     
     public partial class EntiteReponse
     {
-        public int id { get; set; }
-        public string reponse { get; set; }
-        public int fid_question { get; set; }
+        public int Id { get; set; }
+        public string Contenu { get; set; }
+        public int question_fid { get; set; }
+    
+        public virtual EntiteQuestion questions { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace ProjetAppWCF_Interface2037
 {
-    public static class RepresentationFactory
+    public class RepresentationFactory
     {
         public static string Test(Ressource uneRessource)
         {

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ProjetAppWCF_Interface2037
 {
-    public static class RessourceFactory
+    public class RessourceFactory
     {
         public static Ressource Fabriquer(HttpContext context)
         {

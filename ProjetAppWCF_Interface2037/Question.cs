@@ -88,7 +88,7 @@ namespace ProjetAppWCF_Interface2037
             {
                 throw new Exception(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
             }
-
+            
             int val = 0;
 
             if (!int.TryParse(context.Request.Params.Get("question_id"), out val))

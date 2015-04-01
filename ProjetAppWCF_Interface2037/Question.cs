@@ -98,20 +98,26 @@ namespace ProjetAppWCF_Interface2037
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                _maQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
+                var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
 
-                if (_maQuestion.reponses.Count > 0)
+                if (_maQuestion != null)
                 {
-                    var rep = _maQuestion.reponses.First();
+                    if (_maQuestion.reponses.Count > 0)
+                    {
+                        var rep = _maQuestion.reponses.First();
 
-                    _maReponse = new Reponse(_monContextHttp);
-                    _maReponse.Consulter(_monContextHttp);
+                        _maReponse = new Reponse(_monContextHttp);
+                        _maReponse.Consulter(_monContextHttp);
+                    }
+                    else
+                    {
+                        _maReponse = new Reponse(_monContextHttp);
+                    }   
                 }
                 else
                 {
-                    _maReponse = new Reponse(_monContextHttp);
-                }
-                
+                    throw new Exception(string.Format("Question N°{0} : La question n'existe pas.", val));
+                }                
             }
         }
 

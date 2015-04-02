@@ -24,5 +24,14 @@ namespace ProjetAppWCF_Interface2037
         public abstract string GetNameClass();
 
         public abstract string GetContenu();
+
+        public abstract string GetId();
+
+        protected string _nameChampId;
+
+        public string NameChampId
+        {
+            get { return _nameChampId; }
+        }
     }
 }

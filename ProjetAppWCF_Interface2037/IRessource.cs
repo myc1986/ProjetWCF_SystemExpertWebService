@@ -54,5 +54,16 @@ namespace ProjetAppWCF_Interface2037
         /// </summary>
         /// <returns></returns>
         string GetContenu();
+
+        /// <summary>
+        /// retourne l'identifiant de la ressource
+        /// </summary>
+        /// <returns></returns>
+        string GetId();
+
+        /// <summary>
+        /// Retourne le nom du champ utilisé comme identifiant
+        /// </summary>
+        string NameChampId { get; }
     }
 }

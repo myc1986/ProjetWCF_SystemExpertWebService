@@ -19,27 +19,34 @@ namespace ProjetAppWCF_Interface2037
 
         public void ProcessRequest(HttpContext context)
         {
-            IRessource maRessource = RessourceFactory.Fabriquer(context);
-
-            switch (context.Request.HttpMethod)
+            try
             {
-                case "POST":
-                    maRessource.Creer(context);
-                    break;
-                case "GET":
-                    maRessource.Consulter(context);
-                    break;
-                case "DELETE":
-                    maRessource.Supprimer(context);
-                    break;
-                case "PUT":
-                    maRessource.MiseAJour(context);
-                    break;
-                default:
-                    break;
-            }
+                IRessource maRessource = RessourceFactory.Fabriquer(context);
 
-            context.Response.Write(maRessource.GetString());
+                switch (context.Request.HttpMethod)
+                {
+                    case "POST":
+                        maRessource.Creer(context);
+                        break;
+                    case "GET":
+                        maRessource.Consulter(context);
+                        break;
+                    case "DELETE":
+                        maRessource.Supprimer(context);
+                        break;
+                    case "PUT":
+                        maRessource.MiseAJour(context);
+                        break;
+                    default:
+                        break;
+                }
+
+                context.Response.Write(maRessource.GetString());
+            }
+            catch (Exception e)
+            {
+                context.Response.Write(string.Format("<!DOCTYPE html><html><head><title>Erreur {0}</title></head><body><div id='messageErreur'><h1>Erreur {0}</h1>{1}</div></body></html>", HttpContext.Current.Response.StatusCode, e.Message));
+            }
         }
     }
 }

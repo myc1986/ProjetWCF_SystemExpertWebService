@@ -14,13 +14,19 @@ namespace ProjetAppWCF_Interface2037
 
         }
 
-        public static void AjouterEntete(string nomEntete, string valeurEntete)
+        public static void SupprimerEntete(string nomEntete)
         {
+            HttpContext.Current.Response.Headers.Remove(nomEntete);
         }
 
-        public static void DefinirEntete(string nomEntete, string valeurEntete)
+        public static void AjouterEntete(string nomEntete, string valeurEntete)
         {
+            HttpContext.Current.Response.Headers.Add(nomEntete, valeurEntete);
+        }
 
+        public static void ModifierEntete(string nomEntete, string valeurEntete)
+        {
+            HttpContext.Current.Response.Headers.Set(nomEntete, valeurEntete);
         }
     }
 }

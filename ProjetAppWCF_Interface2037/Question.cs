@@ -35,6 +35,7 @@ namespace ProjetAppWCF_Interface2037
         protected Question()
         {
             _maQuestion = new EntiteQuestion();
+            _nameChampId = "question_id";
         }
 
         public Question(HttpContext context)
@@ -42,6 +43,7 @@ namespace ProjetAppWCF_Interface2037
             _maQuestion = new EntiteQuestion();
             _maReponse = new Reponse(context);
             _monContextHttp = context;
+            _nameChampId = "question_id";
         }
 
         public Question(int id, HttpContext context)
@@ -61,6 +63,8 @@ namespace ProjetAppWCF_Interface2037
                     throw new Exception(string.Format("{0} : cet identifiant n'existe pas. Détail :\n{1}", id));
                 }
             }
+
+            _nameChampId = "question_id";
         }
 
         public override void Creer(HttpContext context)
@@ -86,6 +90,9 @@ namespace ProjetAppWCF_Interface2037
         {
             if (!context.Request.Params.AllKeys.Contains("question_id"))
             {
+                //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
+                //ManagerHeader.ModifierEntete("CodeStatus", "400");
+
                 throw new Exception(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
             }
             
@@ -93,31 +100,47 @@ namespace ProjetAppWCF_Interface2037
 
             if (!int.TryParse(context.Request.Params.Get("question_id"), out val))
             {
+                //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
+                //ManagerHeader.ModifierEntete("CodeStatus", "400");
+
                 throw new Exception(string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
-
-                if (_maQuestion != null)
+                try
                 {
-                    if (_maQuestion.reponses.Count > 0)
+                    var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
+                    
+                    if (uneQuestion != null)
                     {
-                        var rep = _maQuestion.reponses.First();
+                        _maQuestion = uneQuestion;
 
-                        _maReponse = new Reponse(_monContextHttp);
-                        _maReponse.Consulter(_monContextHttp);
+                        if (uneQuestion.reponses.Count > 0)
+                        {
+                            _maReponse = new Reponse(_monContextHttp);
+                            _maReponse.Consulter(_monContextHttp);
+                        }
+                        else
+                        {
+                            _maReponse = new Reponse(_monContextHttp);
+                        }
                     }
                     else
                     {
-                        _maReponse = new Reponse(_monContextHttp);
-                    }   
+                        //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
+                        //ManagerHeader.ModifierEntete("CodeStatus", "400");
+
+                        throw new Exception(string.Format("<h2>Question N°{0}</h2><p>La question n'existe pas.</p>", val));
+                    } 
                 }
-                else
+                catch (Exception e)
                 {
-                    throw new Exception(string.Format("Question N°{0} : La question n'existe pas.", val));
-                }                
+                    //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
+                    //ManagerHeader.ModifierEntete("CodeStatus", "300");
+                    
+                    throw new Exception(string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
+                }               
             }
         }
 
@@ -233,6 +256,11 @@ namespace ProjetAppWCF_Interface2037
             }
 
             return rep;
+        }
+
+        public override string GetId()
+        {
+            return Id;
         }
     }
 }

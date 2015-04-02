@@ -10,35 +10,6 @@ namespace ProjetAppWCF_Interface2037
 {
     public class RepresentationFactory
     {
-        public static string Test(Ressource uneRessource)
-        {
-            StringBuilder chaineReponseBuilded = new StringBuilder();
-
-            chaineReponseBuilded.AppendLine("<html>");
-            chaineReponseBuilded.AppendLine("<head>");
-            chaineReponseBuilded.AppendLine(string.Format("<title>{0} : {0}</title>", uneRessource.GetNameClass(), uneRessource.GetContenu()));
-            chaineReponseBuilded.AppendLine("</head>");
-            chaineReponseBuilded.AppendLine("<body>");
-            chaineReponseBuilded.AppendLine(string.Format("<h2>{0} : {1}</h2>", uneRessource.GetNameClass(), uneRessource.GetContenu()));
-
-            if (uneRessource.GetNameClass() == "Question")
-	        {
-		        Question uneQuestion = (Question) uneRessource;
-
-                if (uneQuestion.AUneReponse())
-	            {
-		            chaineReponseBuilded.AppendLine(string.Format("<p>Réponse : {0}</p>" , uneQuestion.ReponseString));
-	            }
-	        }
-
-            chaineReponseBuilded.AppendLine("</body>");
-            chaineReponseBuilded.AppendLine("</html>");
-
-            HtmlString monHtml = new HtmlString(chaineReponseBuilded.ToString());
-
-            return monHtml.ToHtmlString();
-        }
-
         public static string GetRepresentation(string contenTypeRepresentation, IRessource laRessource)
         {
             StringBuilder chaineReponseBuilded = new StringBuilder();
@@ -90,12 +61,14 @@ namespace ProjetAppWCF_Interface2037
         {
             StringBuilder chaineReponseBuilded = new StringBuilder();
 
+            chaineReponseBuilded.AppendLine("<!DOCTYPE html>");
             chaineReponseBuilded.AppendLine("<html>");
             chaineReponseBuilded.AppendLine("<head>");
             chaineReponseBuilded.AppendLine(string.Format("<title>{0} : {0}</title>", laRessource.GetNameClass(), laRessource.GetContenu()));
             chaineReponseBuilded.AppendLine("</head>");
             chaineReponseBuilded.AppendLine("<body>");
-            chaineReponseBuilded.AppendLine(string.Format("<h2>{0} : {1}</h2>", laRessource.GetNameClass(), laRessource.GetContenu()));
+            chaineReponseBuilded.AppendLine(string.Format("<div id='{0}_{1}'>", laRessource.GetNameClass(), laRessource.GetId()));
+            chaineReponseBuilded.AppendLine(string.Format("<h2>{0} N°{2}: {1}</h2>", laRessource.GetNameClass(), laRessource.GetContenu(), laRessource.GetId()));
 
             if (laRessource.GetNameClass() == "Question")
 	        {
@@ -103,10 +76,17 @@ namespace ProjetAppWCF_Interface2037
 
                 if (uneQuestion.AUneReponse())
 	            {
-		            chaineReponseBuilded.AppendLine(string.Format("<p>Réponse : {0}</p>" , uneQuestion.ReponseString.GetContenu()));
+		            chaineReponseBuilded.AppendLine(string.Format("<p id='{0}_{1}'>Réponse : {2}</p>" , uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetContenu()));
 	            }
+                else
+                {
+                    chaineReponseBuilded.AppendLine(string.Format("<p id=''>Réponse : Aucune réponse n'est disponible</p>", uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetContenu()));
+                }
 	        }
 
+            chaineReponseBuilded.AppendLine(string.Format("<p id='pLienConsultation'>Lien de consultation : <a id='lienConsultation' href='/{0}?{1}={2}'>http://{3}:{4}/{0}?{1}={2}</a></p>", laRessource.GetNameClass(), laRessource.NameChampId, laRessource.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port));
+            
+            chaineReponseBuilded.AppendLine("</div>");
             chaineReponseBuilded.AppendLine("</body>");
             chaineReponseBuilded.AppendLine("</html>");
 
@@ -145,6 +125,7 @@ namespace ProjetAppWCF_Interface2037
                     chaineReponseBuilded.Append(SerialiserRessourceJson(laRessource));
                     break;
                 default: // Représentation text brut
+                    chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));
                     break;
             }
 

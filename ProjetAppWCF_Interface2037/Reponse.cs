@@ -31,18 +31,21 @@ namespace ProjetAppWCF_Interface2037
         protected Reponse()
         {
             _maReponse = new EntiteReponse();
+            _nameChampId = "reponse_id";
         }
 
         public Reponse(HttpContext context)
         {
             _maReponse = new EntiteReponse();
             _monContextHttp = context;
+            _nameChampId = "reponse_id";
         }
 
         public Reponse(string id, HttpContext context)
         {
             _maReponse = new EntiteReponse();
             _monContextHttp = context;
+            _nameChampId = "reponse_id";
         }
 
         public override void Creer(System.Web.HttpContext context)
@@ -354,6 +357,11 @@ namespace ProjetAppWCF_Interface2037
         public override string GetContenu()
         {
             return _maReponse.Contenu;
+        }
+
+        public override string GetId()
+        {
+            return Id;
         }
     }
 }

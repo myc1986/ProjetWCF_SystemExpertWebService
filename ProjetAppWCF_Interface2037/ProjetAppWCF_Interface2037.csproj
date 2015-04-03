@@ -119,7 +119,6 @@
     <None Include="Resources\Newtonsoft.Json.pdb" />
     <None Include="Resources\Newtonsoft.Json.xml" />
     <None Include="Resources\bdd_service_web.sql" />
-    <Content Include="Service1.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -144,10 +143,6 @@
     <Compile Include="Ressource.cs" />
     <Compile Include="RessourceFactory.cs" />
     <Compile Include="RestServiceWebSystemExpert.cs" />
-    <Compile Include="Service1.svc.cs">
-      <DependentUpon>Service1.svc</DependentUpon>
-    </Compile>
-    <Compile Include="IService1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemExpert.Context.cs">
       <AutoGen>True</AutoGen>

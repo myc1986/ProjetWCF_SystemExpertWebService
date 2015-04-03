@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
@@ -69,19 +70,23 @@ namespace ProjetAppWCF_Interface2037
 
         public override void Creer(HttpContext context)
         {
-            if (String.IsNullOrEmpty(context.Request.Params.GetValues("question_contenu").ToString()))
+
+            //HtmlString mm = new HtmlString(sContent);
+
+
+            if (String.IsNullOrEmpty(context.Request["question_contenu"]))
             {
-                throw new Exception(string.Format("{0} : Vous n'avez pas saisi de contenu", "question_contenu"));
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "question_contenu"));
             }
 
             //Gestion cache à faire
 
             //EntiteQuestion myEntity = new EntiteQuestion();
-            //myEntity.Contenu = context.Request.Params.GetValues("question_contenu").ToString();
+            //myEntity.Contenu = context.Request.Params.Get("question_contenu").ToString();
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                bdd.AjouterQuestion(context.Request.Params.GetValues("question_contenu").ToString());
+                bdd.AjouterQuestion(context.Request["question_contenu"]);
                 bdd.SaveChanges();
             }
         }
@@ -92,18 +97,25 @@ namespace ProjetAppWCF_Interface2037
             {
                 //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                 //ManagerHeader.ModifierEntete("CodeStatus", "400");
-
-                throw new Exception(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
             }
             
             int val = 0;
+
+            Regex regexUrlParam = new Regex("^http://(.*)/(.*)/(.*)$");
+
+            Match group = regexUrlParam.Match(context.Request.Url.AbsoluteUri);
+
+            //if (context.Request.Url.AbsolutePath.Split("/Question"))
+            //{
+                
+            //}
 
             if (!int.TryParse(context.Request.Params.Get("question_id"), out val))
             {
                 //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                 //ManagerHeader.ModifierEntete("CodeStatus", "400");
-
-                throw new Exception(string.Format("{0} : Vous devez saisir un entier", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
             using (bdd_service_web bdd = new bdd_service_web())
@@ -131,29 +143,29 @@ namespace ProjetAppWCF_Interface2037
                         //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                         //ManagerHeader.ModifierEntete("CodeStatus", "400");
 
-                        throw new Exception(string.Format("<h2>Question N°{0}</h2><p>La question n'existe pas.</p>", val));
+                        throw new HttpException(400, string.Format("La question n'existe pas.", val));
                     } 
                 }
                 catch (Exception e)
                 {
-                    //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
-                    //ManagerHeader.ModifierEntete("CodeStatus", "300");
+                    //ManagerHeader.ModifierEntete("Content-Type", HttpContext.Current.Request.ContentType);
+                    //ManagerHeader.ModifierEntete("status", "400");
                     
-                    throw new Exception(string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
+                    throw new HttpException(400, string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
                 }               
             }
         }
 
         public override void Supprimer(HttpContext context)
         {
-            if (String.IsNullOrEmpty(context.Request.Params.GetValues("question_id").ToString()))
+            if (String.IsNullOrEmpty(context.Request.Params.Get("question_id").ToString()))
             {
                 throw new Exception(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
             }
 
             int val = 0;
 
-            if (!int.TryParse(context.Request.Params.GetValues("question_id").ToString(), out val))
+            if (!int.TryParse(context.Request.Params.Get("question_id").ToString(), out val))
             {
                 throw new Exception(string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
@@ -165,7 +177,7 @@ namespace ProjetAppWCF_Interface2037
                 if (uneQuestion != null)
                 {
                     _maQuestion = uneQuestion;
-                    _maQuestion.Contenu = context.Request.Params.GetValues("question_contenu").ToString();
+                    _maQuestion.Contenu = context.Request.Params.Get("question_contenu").ToString();
                 }
                 else
                 {
@@ -179,14 +191,14 @@ namespace ProjetAppWCF_Interface2037
 
         public override void MiseAJour(HttpContext context)
         {
-            if (String.IsNullOrEmpty(context.Request.Params.GetValues("question_id").ToString()))
+            if (String.IsNullOrEmpty(context.Request.Params.Get("question_id").ToString()))
             {
                 throw new Exception(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
             }
 
             int val = 0;
 
-            if (!int.TryParse(context.Request.Params.GetValues("question_id").ToString(), out val))
+            if (!int.TryParse(context.Request.Params.Get("question_id").ToString(), out val))
             {
                 throw new Exception(string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
@@ -198,7 +210,7 @@ namespace ProjetAppWCF_Interface2037
                 if (uneQuestion != null)
                 {
                     _maQuestion = uneQuestion;
-                    _maQuestion.Contenu = context.Request.Params.GetValues("question_contenu").ToString();
+                    _maQuestion.Contenu = context.Request.Params.Get("question_contenu").ToString();
                 }
                 else
                 {

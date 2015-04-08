@@ -115,6 +115,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\i2037.pubxml" />
     <None Include="Resources\Newtonsoft.Json.dll" />
     <None Include="Resources\Newtonsoft.Json.pdb" />
     <None Include="Resources\Newtonsoft.Json.xml" />
@@ -182,7 +183,6 @@
       <DependentUpon>SystemExpert.edmx</DependentUpon>
       <LastGenOutput>SystemExpert.cs</LastGenOutput>
     </Content>
-    <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

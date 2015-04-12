@@ -89,6 +89,8 @@ namespace ProjetAppWCF_Interface2037
                 bdd.questions.Add(myEntity);
                 bdd.SaveChanges();
                 _maQuestion = myEntity;
+
+                ManagerHeader.AjouterCodeHeaderReponse(201, this);
             }
         }
 
@@ -180,6 +182,8 @@ namespace ProjetAppWCF_Interface2037
 
                     bdd.questions.Remove(_maQuestion);
                     bdd.SaveChanges();
+
+                    HttpContext.Current.Response.StatusCode = 204;
                 }
                 catch (Exception e)
                 {

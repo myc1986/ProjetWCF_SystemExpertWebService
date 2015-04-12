@@ -28,5 +28,21 @@ namespace ProjetAppWCF_Interface2037
         {
             HttpContext.Current.Response.Headers.Set(nomEntete, valeurEntete);
         }
+
+        public static void AjouterCodeHeaderReponse(int code, IRessource laRessource)
+        {
+            switch (code)
+            {
+                case 201: // Création d'une ressource
+                    string chaineLienConsultation = string.Format("http://{3}:{4}/{0}?{1}={2}", laRessource.GetNameClass(), laRessource.NameChampId, laRessource.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+
+                    HttpContext.Current.Response.AppendHeader("Location", chaineLienConsultation);
+                    HttpContext.Current.Response.StatusCode = code;
+                    break;
+                default:
+                    HttpContext.Current.Response.StatusCode = code;
+                    break;
+            }
+        }
     }
 }

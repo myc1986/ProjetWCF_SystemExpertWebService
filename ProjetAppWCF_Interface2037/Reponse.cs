@@ -103,6 +103,8 @@ namespace ProjetAppWCF_Interface2037
                     bdd.SaveChanges();
 
                     _maReponse = myEntity;
+
+                    ManagerHeader.AjouterCodeHeaderReponse(201, this);
                 }
                 catch (Exception e)
                 {
@@ -291,6 +293,8 @@ namespace ProjetAppWCF_Interface2037
                                 bdd.SaveChanges();
 
                                 valIdException = _maReponse.Id;
+
+                                ManagerHeader.AjouterCodeHeaderReponse(204, this);
                             }
                             else
                             {
@@ -314,6 +318,8 @@ namespace ProjetAppWCF_Interface2037
                                 _maReponse.Contenu = contenuReponse;
 
                                 bdd.SaveChanges();
+
+                                ManagerHeader.AjouterCodeHeaderReponse(204, this);
                             }
                             else
                             {

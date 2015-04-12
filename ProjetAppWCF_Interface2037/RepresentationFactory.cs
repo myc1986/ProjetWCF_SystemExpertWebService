@@ -89,13 +89,16 @@ namespace ProjetAppWCF_Interface2037
                 }
 	        }
 
+            string chaineLienConsultation = string.Format("http://{3}:{4}/{0}?{1}={2}", laRessource.GetNameClass(), laRessource.NameChampId, laRessource.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+
             chaineReponseBuilded.AppendLine(string.Format("<p id='pLienConsultation'>Lien de consultation : <a id='lienConsultation' href='/{0}?{1}={2}'>http://{3}:{4}/{0}?{1}={2}</a></p>", laRessource.GetNameClass(), laRessource.NameChampId, laRessource.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port));
-            
+
             chaineReponseBuilded.AppendLine("</div>");
             chaineReponseBuilded.AppendLine("</body>");
             chaineReponseBuilded.AppendLine("</html>");
 
             HtmlString monHtml = new HtmlString(chaineReponseBuilded.ToString());
+
 
             return monHtml;
         }

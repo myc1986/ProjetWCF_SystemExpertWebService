@@ -81,13 +81,14 @@ namespace ProjetAppWCF_Interface2037
 
             //Gestion cache à faire
 
-            //EntiteQuestion myEntity = new EntiteQuestion();
-            //myEntity.Contenu = context.Request.Params.Get("question_contenu").ToString();
+            EntiteQuestion myEntity = new EntiteQuestion();
+            myEntity.Contenu = context.Request.Params.Get("question_contenu").ToString();
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                bdd.AjouterQuestion(context.Request["question_contenu"]);
+                bdd.questions.Add(myEntity);
                 bdd.SaveChanges();
+                _maQuestion = myEntity;
             }
         }
 
@@ -97,19 +98,10 @@ namespace ProjetAppWCF_Interface2037
             {
                 //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                 //ManagerHeader.ModifierEntete("CodeStatus", "400");
-                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
             }
             
             int val = 0;
-
-            Regex regexUrlParam = new Regex("^http://(.*)/(.*)/(.*)$");
-
-            Match group = regexUrlParam.Match(context.Request.Url.AbsoluteUri);
-
-            //if (context.Request.Url.AbsolutePath.Split("/Question"))
-            //{
-                
-            //}
 
             if (!int.TryParse(context.Request.Params.Get("question_id"), out val))
             {
@@ -143,7 +135,7 @@ namespace ProjetAppWCF_Interface2037
                         //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                         //ManagerHeader.ModifierEntete("CodeStatus", "400");
 
-                        throw new HttpException(400, string.Format("La question n'existe pas.", val));
+                        throw new HttpException(404, string.Format("La question N°{0} n'existe pas.", val));
                     } 
                 }
                 catch (Exception e)
@@ -151,7 +143,7 @@ namespace ProjetAppWCF_Interface2037
                     //ManagerHeader.ModifierEntete("Content-Type", HttpContext.Current.Request.ContentType);
                     //ManagerHeader.ModifierEntete("status", "400");
                     
-                    throw new HttpException(400, string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
+                    throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
                 }               
             }
         }
@@ -160,32 +152,42 @@ namespace ProjetAppWCF_Interface2037
         {
             if (String.IsNullOrEmpty(context.Request.Params.Get("question_id").ToString()))
             {
-                throw new Exception(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
             }
 
             int val = 0;
 
             if (!int.TryParse(context.Request.Params.Get("question_id").ToString(), out val))
             {
-                throw new Exception(string.Format("{0} : Vous devez saisir un entier", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
-
-                if (uneQuestion != null)
+                try
                 {
-                    _maQuestion = uneQuestion;
-                    _maQuestion.Contenu = context.Request.Params.Get("question_contenu").ToString();
-                }
-                else
-                {
-                    throw new Exception(string.Format("{0} : cet identifiant n'existe pas. Détail :\n{1}", val));
-                }
+                    var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
 
-                bdd.questions.Remove(_maQuestion);
-                bdd.SaveChanges();
+                    if (uneQuestion != null)
+                    {
+                        _maQuestion = uneQuestion;
+                        _maQuestion.Contenu = context.Request.Params.Get("question_contenu").ToString();
+                    }
+                    else
+                    {
+                        throw new HttpException(404, string.Format("La question n°{0} n'existe pas.", val));
+                    }
+
+                    bdd.questions.Remove(_maQuestion);
+                    bdd.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    //ManagerHeader.ModifierEntete("Content-Type", HttpContext.Current.Request.ContentType);
+                    //ManagerHeader.ModifierEntete("status", "400");
+
+                    throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
+                } 
             }
         }
 
@@ -193,14 +195,14 @@ namespace ProjetAppWCF_Interface2037
         {
             if (String.IsNullOrEmpty(context.Request.Params.Get("question_id").ToString()))
             {
-                throw new Exception(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
             }
 
             int val = 0;
 
             if (!int.TryParse(context.Request.Params.Get("question_id").ToString(), out val))
             {
-                throw new Exception(string.Format("{0} : Vous devez saisir un entier", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
             using (bdd_service_web bdd = new bdd_service_web())
@@ -214,7 +216,7 @@ namespace ProjetAppWCF_Interface2037
                 }
                 else
                 {
-                    throw new Exception(string.Format("{0} : cet identifiant n'existe pas. Détail :\n{1}", val));
+                    throw new HttpException(404, string.Format("{0} : La question n°{0} n'existe pas.", val));
                 }
 
                 bdd.questions.Remove(_maQuestion);

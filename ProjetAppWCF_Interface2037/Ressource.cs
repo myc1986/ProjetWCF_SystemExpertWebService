@@ -34,8 +34,9 @@ namespace ProjetAppWCF_Interface2037
             get { return _nameChampId; }
         }
 
+        protected string _lienRessource;
 
-        public string LienRessource
+        public string Lien
         {
             get 
             { 

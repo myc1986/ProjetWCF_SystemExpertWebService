@@ -69,6 +69,6 @@ namespace ProjetAppWCF_Interface2037
         /// <summary>
         /// Retourne le chemin d'accès à la ressource
         /// </summary>
-        string LienRessource { get; }
+        string Lien { get; }
     }
 }

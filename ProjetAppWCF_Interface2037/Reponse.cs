@@ -188,39 +188,38 @@ namespace ProjetAppWCF_Interface2037
         {
             StringBuilder messageException = new StringBuilder();
 
-            if (!context.Request.Params.AllKeys.Contains("reponse_contenu"))
+            if (!context.Request.Form.AllKeys.Contains("reponse_id"))
             {
-                messageException.AppendLine(string.Format("{0} : Vous n'avez pas saisi de contenu réponse", "reponse_contenu"));
+                messageException.AppendLine(string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'", "reponse_id"));
             }
 
             int valIdReponse = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("reponse_contenu"), out valIdReponse))
+            if (!int.TryParse(context.Request["reponse_id"], out valIdReponse))
             {
-                messageException.AppendLine(string.Format("{0} : Vous devez saisir du texte", "reponse_contenu"));
+                messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "reponse_id"));
             }
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
                 var uneReponse = bdd.reponses.Where(pp => pp.Id == valIdReponse).FirstOrDefault();
 
-                if (uneReponse != null)
+                if (uneReponse == null)
                 {
-                    _maReponse = uneReponse;
-                    _maReponse.Contenu = context.Request.Params.Get("reponse_contenu").ToString();
-                }
-                else
-                {
-                    throw new Exception(messageException.ToString());
+                    throw new HttpException(messageException.ToString());
                 }
 
                 bdd.reponses.Remove(uneReponse);
                 bdd.SaveChanges();
+
+                _maReponse = new EntiteReponse();
             }
         }
 
         public override void MiseAJour(System.Web.HttpContext context)
         {
+            int valIdException = 0;
+
             StringBuilder messageException = new StringBuilder();
 
             if (!context.Request.Form.AllKeys.Contains("question_id"))
@@ -248,6 +247,8 @@ namespace ProjetAppWCF_Interface2037
                 }
             }
 
+            valIdException = val;
+
             int valIdReponse = 0;
 
             if (val <= 0)
@@ -260,7 +261,9 @@ namespace ProjetAppWCF_Interface2037
                 if (!int.TryParse(context.Request["reponse_id"], out valIdReponse))
                 {
                     messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "reponse_id"));
-                }   
+                }
+
+                valIdException = valIdReponse;
             }
 
             string contenuReponse = context.Request["reponse_contenu"];
@@ -272,50 +275,66 @@ namespace ProjetAppWCF_Interface2037
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                if (val > 0)
+                try
                 {
-                    var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
-
-                    if (uneQuestion != null)
+                    if (val > 0)
                     {
-                        if (uneQuestion.reponses.Count > 0)
-                        {
-                            _maReponse = uneQuestion.reponses.First();
-                            _maReponse.Contenu = contenuReponse;
+                        var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
 
-                            bdd.SaveChanges();
+                        if (uneQuestion != null)
+                        {
+                            if (uneQuestion.reponses.Count > 0)
+                            {
+                                _maReponse = uneQuestion.reponses.First();
+                                _maReponse.Contenu = contenuReponse;
+
+                                bdd.SaveChanges();
+
+                                valIdException = _maReponse.Id;
+                            }
+                            else
+                            {
+                                throw new HttpException(304, string.Format("{0} : La ressource doit être créer avant d'être mise à jour. Consulter la documentation pour créer la ressource.", "reponse_id", val));
+                            }
                         }
                         else
                         {
-                            _maReponse = new EntiteReponse();
-                        }
-                    }
-                }
-                else
-                {
-                    if (valIdReponse > 0)
-                    {
-                        var uneReponse = bdd.reponses.Where(pp => pp.Id == valIdReponse).FirstOrDefault();
-
-                        if (uneReponse != null)
-                        {
-                            _maReponse = uneReponse;
-                            _maReponse.Contenu = contenuReponse;
-
-                            bdd.SaveChanges();
-                        }
-                        else
-                        {
-                            _maReponse = new EntiteReponse();
-
-                            throw new Exception(messageException.ToString());
+                            throw new HttpException(404, string.Format("{0} : La question n°{1} associé à cette ressource n'existe pas.", "reponse_id", val));
                         }
                     }
                     else
                     {
-                        _maReponse = new EntiteReponse();
+                        if (valIdReponse > 0)
+                        {
+                            var uneReponse = bdd.reponses.Where(pp => pp.Id == valIdReponse).FirstOrDefault();
 
-                        throw new Exception(messageException.ToString());
+                            if (uneReponse != null)
+                            {
+                                _maReponse = uneReponse;
+                                _maReponse.Contenu = contenuReponse;
+
+                                bdd.SaveChanges();
+                            }
+                            else
+                            {
+                                throw new HttpException(404, string.Format("{0} : L'identifiant réponse n°{1} n'existe pas.", "reponse_id", valIdReponse));
+                            }
+                        }
+                        else
+                        {
+                            throw new HttpException(404, string.Format("{0} : Dans votre formulaire, vous devez avoir un champ dont l'identifiant est '{0}' et la valeur doit être un entier. Valeur saisie : '{1}'", "reponse_id", valIdReponse));
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (val <= 0)
+                    {
+                        throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", valIdException, e.Message));
+                    }
+                    else
+                    {
+                        throw new HttpException(e.GetHashCode(), string.Format("<h2>Réponse N°{0}</h2><p>Détail: {1}</p>", valIdException, e.Message));
                     }
                 }
             }

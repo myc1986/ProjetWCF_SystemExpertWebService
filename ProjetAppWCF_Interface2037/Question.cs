@@ -193,34 +193,92 @@ namespace ProjetAppWCF_Interface2037
 
         public override void MiseAJour(HttpContext context)
         {
-            if (String.IsNullOrEmpty(context.Request.Params.Get("question_id").ToString()))
+            if (!context.Request.Form.AllKeys.Contains("question_id"))
             {
-                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
+                throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_id"));
+            }
+
+            if (String.IsNullOrEmpty(context.Request["question_id"]))
+            {
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
+            }
+
+            if (!context.Request.Form.AllKeys.Contains("question_contenu"))
+            {
+                throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_contenu"));
+            }
+
+            if (String.IsNullOrEmpty(context.Request["question_contenu"]))
+            {
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "question_contenu"));
             }
 
             int val = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("question_id").ToString(), out val))
+            if (!int.TryParse(context.Request["question_id"], out val))
             {
                 throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
+            string contenuQuestion = context.Request["question_contenu"];
+            string contenuReponse = "";
+
+            if (context.Request.Form.AllKeys.Contains("reponse_contenu"))
+            {
+                if (String.IsNullOrEmpty(context.Request["reponse_contenu"]))
+                {
+                    throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "reponse_contenu"));
+                }
+
+                contenuReponse = context.Request["reponse_contenu"];
+            }
+
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
-
-                if (uneQuestion != null)
+                try
                 {
-                    _maQuestion = uneQuestion;
-                    _maQuestion.Contenu = context.Request.Params.Get("question_contenu").ToString();
-                }
-                else
-                {
-                    throw new HttpException(404, string.Format("{0} : La question n°{0} n'existe pas.", val));
-                }
+                    if (val > 0)
+                    {
+                        var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
 
-                bdd.questions.Remove(_maQuestion);
-                bdd.SaveChanges();
+                        if (uneQuestion != null)
+                        {
+                            _maQuestion = uneQuestion;
+                            _maQuestion.Contenu = contenuQuestion;
+
+                            if (_maQuestion.reponses.Count > 0)
+                            {
+                                _maQuestion.reponses.First().Contenu = contenuReponse;
+                                bdd.SaveChanges();
+                            }
+                            else
+                            {
+                                if (contenuReponse.Length > 0)
+                                {
+                                    EntiteReponse uneReponse = new EntiteReponse();
+                                    uneReponse.Contenu = contenuReponse;
+                                    uneReponse.question_fid = val;
+                                    bdd.reponses.Add(uneReponse);
+                                    bdd.SaveChanges();
+
+                                    _maReponse.Consulter(context);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new HttpException(404, string.Format("{0} : La question n°{0} n'existe pas.", val));
+                        }
+                    }
+                    else
+                    {
+                        throw new HttpException(404, string.Format("{0} : La question n°{1} n'existe pas.", "question_id", val));
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
+                }
             }
         }
 

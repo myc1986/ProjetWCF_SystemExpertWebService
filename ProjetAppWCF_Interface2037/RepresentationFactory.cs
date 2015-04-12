@@ -81,7 +81,7 @@ namespace ProjetAppWCF_Interface2037
 
                 if (uneQuestion.AUneReponse())
 	            {
-		            chaineReponseBuilded.AppendLine(string.Format("<p id='{0}_{1}'>Réponse : {2}</p>" , uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetContenu()));
+		            chaineReponseBuilded.AppendLine(string.Format("<p id='{0}_{1}'>Réponse N°{1}: {2}</p>" , uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetContenu()));
 	            }
                 else
                 {

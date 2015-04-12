@@ -15,6 +15,11 @@ namespace ProjetAppWCF_Interface2037
             StringBuilder chaineReponseBuilded = new StringBuilder();
             XmlSerializer xs;
 
+            if (string.IsNullOrEmpty(laRessource.GetId()))
+            {
+                return string.Format("Ressource '{0}' supprimé", laRessource.GetNameClass());
+            }
+
             switch (contenTypeRepresentation)
             {
                 case "text/html": // Représentation HTML
@@ -109,9 +114,12 @@ namespace ProjetAppWCF_Interface2037
             StringBuilder chaineReponseBuilded = new StringBuilder();
             XmlSerializer xs;
 
-            
+            if (string.IsNullOrEmpty(laRessource.GetId()))
+            {
+                return string.Format("1", laRessource.GetNameClass());
+            }
 
-            switch (leContext.Request.ContentType)
+            switch (leContext.Response.ContentType)
             {
                 case "text/html": // Représentation HTML
                     chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));

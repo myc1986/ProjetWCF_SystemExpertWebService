@@ -42,6 +42,15 @@ namespace ProjetAppWCF_Interface2037
                         break;
                 }
 
+                
+                
+                HttpContext.Current.Response.Cache.SetVaryByCustom(string.Format("AllParams=[{0}];AllFormParams=[{1}]", HttpContext.Current.Request.Params, HttpContext.Current.Request.Form));
+                HttpContext.Current.Response.Cache.SetValidUntilExpires(false);
+                HttpContext.Current.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+                HttpContext.Current.Response.Cache.SetExpires(DateTime.UtcNow);
+                HttpContext.Current.Response.Cache.SetLastModified(DateTime.UtcNow);
+                HttpContext.Current.Response.Cache.SetETagFromFileDependencies();
+
                 context.Response.Write(maRessource.GetString());
             //}
             //catch (Exception e)

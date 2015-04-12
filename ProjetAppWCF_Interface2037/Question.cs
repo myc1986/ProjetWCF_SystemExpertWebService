@@ -338,5 +338,13 @@ namespace ProjetAppWCF_Interface2037
         {
             return Id;
         }
+
+        [XmlElement]
+        public new string LienRessource {
+            get
+            {
+                return string.Format("http://{3}:{4}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+            }
+        }
     }
 }

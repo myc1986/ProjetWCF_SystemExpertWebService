@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Test d'ajoute d'une question</title>
+    <script src="Scripts/jquery-2.1.3.min.js"></script>
+</head>
+<body>
+    <form id="formPost" action="/Question" method="post">
+        <p><label for="adresse_serviceweb" id="lbl_url">Adresse service web : <input type="text" name="adresse_serviceweb" id="adresse_serviceweb" value="" /></label></p>
+        <p><label for="question_contenu" id="lbl_question_contenu">Votre question : <input type="text" name="question_contenu" id="question_contenu" value="" /></label></p>
+        <input type="submit" name="Poster" value="Poster" onclick="PostForm($('#adresse_serviceweb').val());" />
+    </form>
+    <script type="text/ecmascript">
+        $("#formPost").submit(function (event) {
+            if ($('#adresse_serviceweb').val().length <= 0) {
+                event.preventDefault();
+                alert("Envoi Annulé ! url='" + $('#adresse_serviceweb').val() + "'");
+            }
+            else {
+                $('form').attr('action', $('#adresse_serviceweb').val())
+            }
+        });
+    </script>
+</body>
+</html>

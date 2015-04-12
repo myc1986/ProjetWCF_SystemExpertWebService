@@ -50,80 +50,65 @@ namespace ProjetAppWCF_Interface2037
 
         public override void Creer(System.Web.HttpContext context)
         {
-            if (String.IsNullOrEmpty(context.Request.Params.GetValues("question_fid").ToString()))
-	        {
-                throw new Exception(string.Format("{0} : Identifiant vide ou inexistant", "question_fid"));
-	        }
-
-            if (String.IsNullOrEmpty(context.Request.Params.GetValues("reponse").ToString()))
+            if (!context.Request.Form.AllKeys.Contains("question_fid"))
             {
-                throw new Exception(string.Format("{0} : Identifiant vide ou inexistant", "reponse"));
+                throw new HttpException(400, string.Format("{0} : Dans votre formlaire, vous n'avez de champ dont l'identifiant est '{0}'.", "question_fid"));
             }
 
+            if (!context.Request.Form.AllKeys.Contains("reponse_contenu"))
+            {
+                throw new HttpException(400, string.Format("{0} : Dans votre formlaire, vous n'avez de champ dont l'identifiant est '{0}'.", "reponse_contenu"));
+            }
 
-            //Gestion cache à faire
+            if (String.IsNullOrEmpty(context.Request["question_fid"]))
+	        {
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant.", "question_fid"));
+	        }
+
+            int val_question_fid = 0;
+
+            if (!int.TryParse(context.Request["question_fid"], out val_question_fid))
+            {
+                throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier.", "question_fid"));
+            }
+
+            if (String.IsNullOrEmpty(context.Request["reponse_contenu"]))
+            {
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu pour votre réponse à la quesion n°{1}", "reponse_contenu", val_question_fid));
+            }
 
             EntiteReponse myEntity = new EntiteReponse();
-            myEntity.question_fid =  Convert.ToInt16(context.Request.Params.GetValues("question_fid").ToString());
-            myEntity.Contenu = context.Request.Params.GetValues("reponse_contenu").ToString();
+            myEntity.question_fid =  val_question_fid;
+            myEntity.Contenu = context.Request["reponse_contenu"];
 
-            //Creer un
-
-            SqlConnection maConnexion = new SqlConnection("server=localhost;user id=root;persistsecurityinfo=True;database=web_service");
-
-            try
+            using (bdd_service_web bdd = new bdd_service_web())
             {
-                maConnexion.Open();
+                try
+                {
+                    var uneQuestion = bdd.questions.Where(pp => pp.Id.Equals(val_question_fid)).FirstOrDefault();
+
+                    if (uneQuestion != null)
+                    {
+                        if (uneQuestion.reponses.Count > 0)
+                        {
+                            throw new HttpException(400, string.Format("{0} : Une réponse existe déjà pour cette question n°{1}. Réponse présente : {2}.\nSi vous souhaitez mettre à jour la réponse à la question, merci de consulter la documentation pour une mise à jour de la réponse.", "question_fid", val_question_fid, uneQuestion.reponses.First().Contenu));
+                        }
+                    }
+                    else
+                    {
+                        throw new HttpException(404, string.Format("{0} : La quesion n°{1} n'existe pas.", "question_fid", val_question_fid));
+                    }
+
+                    bdd.reponses.Add(myEntity);
+                    bdd.SaveChanges();
+
+                    _maReponse = myEntity;
+                }
+                catch (Exception e)
+                {
+                    throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val_question_fid, e.Message));
+                }
             }
-            catch (SqlException e)
-            {
-                throw new Exception(string.Format("Impossible de se connecter à la base. \n Détails : Code erreur {0} : {1}", e.ErrorCode, e.Message));
-            }
-            
-
-            SqlCommand maCommande = new SqlCommand();
-            maCommande.Connection = maConnexion;
-            maCommande.CommandText = "AjouterReponse";
-            maCommande.CommandType = System.Data.CommandType.StoredProcedure;
-
-            SqlParameter monParam = new SqlParameter("@p_reponse_contenu", myEntity.Contenu);
-            monParam.DbType = System.Data.DbType.AnsiString;
-
-            maCommande.Parameters.Add(monParam);
-
-            monParam = new SqlParameter("@p_question_fid", myEntity.question_fid);
-            monParam.DbType = System.Data.DbType.Int16;
-
-            maCommande.Parameters.Add(monParam);
-
-            SqlDataReader monData;
-            
-            try 
-	        {	        
-		        monData = maCommande.ExecuteReader();
-	        }
-	        catch (SqlException e)
-	        {
-                throw new Exception(string.Format("Impossible d'exécuter la procédure stockée. \n Détails : Code erreur {0} : {1}", e.ErrorCode, e.Message));
-	        }
-                
-            try 
-	        {	        
-		        monData.Close();
-	        }
-	        catch (SqlException e)
-	        {
-                throw new Exception(string.Format("Impossible de fermer la dataReader : voir monData.Close();. \n Détails : Code erreur {0} : {1}", e.ErrorCode, e.Message));
-	        }
-
-            try
-	        {	        
-		        maConnexion.Close();
-	        }
-	        catch (SqlException e)
-	        {
-                throw new Exception(string.Format("Impossible de fermer la la connexion : voir maConnexion.Close();. \n Détails : Code erreur {0} : {1}", e.ErrorCode, e.Message));
-	        }
         }
 
         public override void Consulter(System.Web.HttpContext context)
@@ -238,33 +223,49 @@ namespace ProjetAppWCF_Interface2037
         {
             StringBuilder messageException = new StringBuilder();
 
-            if (!context.Request.Params.AllKeys.Contains("question_id"))
+            if (!context.Request.Form.AllKeys.Contains("question_id"))
             {
                 messageException.AppendLine(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
             }
 
             int val = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("question_id"), out val))
+            if (!int.TryParse(context.Request["question_id"], out val))
             {
                 messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
-            if (!context.Request.Params.AllKeys.Contains("reponse_id"))
+            if (val <= 0)
             {
-                messageException.AppendLine(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "reponse_id"));
+                if (!context.Request.Form.AllKeys.Contains("question_fid"))
+                {
+                    messageException.AppendLine(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_fid"));
+                }
+
+                if (!int.TryParse(context.Request["question_fid"], out val))
+                {
+                    messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "question_fid"));
+                }
             }
 
             int valIdReponse = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("reponse_id"), out valIdReponse))
+            if (val <= 0)
             {
-                messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "reponse_id"));
+                if (!context.Request.Form.AllKeys.Contains("reponse_id"))
+                {
+                    messageException.AppendLine(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "reponse_id"));
+                }
+
+                if (!int.TryParse(context.Request["reponse_id"], out valIdReponse))
+                {
+                    messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "reponse_id"));
+                }   
             }
 
-            string contenuReponse = "";
+            string contenuReponse = context.Request["reponse_contenu"];
 
-            if (!int.TryParse(context.Request.Params.Get("reponse_contenu"), out valIdReponse))
+            if (string.IsNullOrEmpty(context.Request["reponse_contenu"]))
             {
                 messageException.AppendLine(string.Format("{0} : Vous devez saisir du texte", "reponse_contenu"));
             }
@@ -322,26 +323,7 @@ namespace ProjetAppWCF_Interface2037
 
         public override string GetString()
         {
-            StringBuilder chaineReponseBuilded = new StringBuilder();
-            XmlSerializer xs = new XmlSerializer(typeof(Reponse));
-
-            switch (_monContextHttp.Response.ContentType)
-            {
-                case "text/xml": // représentation XML
-                    XmlWriter monWriterXml = XmlWriter.Create(chaineReponseBuilded);
-                    xs.Serialize(monWriterXml, this);
-                    break;
-                case "text/html": // Représentation HTML
-                    XmlWriter monWriterHtml = XmlWriter.Create(chaineReponseBuilded);
-                    xs.Serialize(monWriterHtml, this);
-                    break;
-                case "text/plain": // Représentation text brut
-                    break;
-                default: // Représentation text brut
-                    break;
-            }
-
-            return chaineReponseBuilded.ToString();
+            return RepresentationFactory.GetRepresentation(_monContextHttp, this);
         }
 
         public override string GetString(string formatRepresentationRessource)

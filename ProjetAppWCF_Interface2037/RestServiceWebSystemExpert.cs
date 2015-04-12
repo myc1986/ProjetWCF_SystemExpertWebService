@@ -8,6 +8,10 @@ namespace ProjetAppWCF_Interface2037
 {
     public class RestServiceWebSystemExpert : IHttpHandler
     {
+        public RestServiceWebSystemExpert()
+        {
+            NegociationRepresentation.InitMimes();
+        }
 
         public bool IsReusable
         {
@@ -19,7 +23,6 @@ namespace ProjetAppWCF_Interface2037
 
         public void ProcessRequest(HttpContext context)
         {
-
             //try
             //{
                 IRessource maRessource = RessourceFactory.Fabriquer(context);

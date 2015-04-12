@@ -20,7 +20,10 @@ namespace ProjetAppWCF_Interface2037
                 return string.Format("Ressource '{0}' supprimé", laRessource.GetNameClass());
             }
 
-            switch (contenTypeRepresentation)
+            List<string> lesAcceptesTypes = new List<string>();
+            lesAcceptesTypes.Add(contenTypeRepresentation);
+
+            switch (NegociationRepresentation.NegocierRepresentation(lesAcceptesTypes.ToArray()))
             {
                 case "text/html": // Représentation HTML
                     chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));
@@ -122,7 +125,7 @@ namespace ProjetAppWCF_Interface2037
                 return string.Format("1", laRessource.GetNameClass());
             }
 
-            switch (leContext.Response.ContentType)
+            switch (NegociationRepresentation.NegocierRepresentation(leContext.Request.AcceptTypes))
             {
                 case "text/html": // Représentation HTML
                     chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));

@@ -134,6 +134,7 @@
     </Compile>
     <Compile Include="IRessource.cs" />
     <Compile Include="ManagerHeader.cs" />
+    <Compile Include="NegociationRepresentation.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

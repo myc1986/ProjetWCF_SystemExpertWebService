@@ -293,7 +293,7 @@ namespace ProjetAppWCF_Interface2037
 
         public override string GetString(string formatRepresentationRessource)
         {
-            throw new NotImplementedException();
+            return RepresentationFactory.GetRepresentation(formatRepresentationRessource, this);
         }
 
         public override string GetNameClass()

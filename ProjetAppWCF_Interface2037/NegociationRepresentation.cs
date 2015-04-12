@@ -29,11 +29,11 @@ namespace ProjetAppWCF_Interface2037
 
                 return _mesMimes;
             }
+        }
 
-            set
-            {
-                _mesMimes = value;
-            }
+        public static void AddMimeSupporte(string mime)
+        {
+            _mesMimes.Add(mime.ToLower());
         }
 
         public static string NegocierRepresentation(string[] lesMimesAcceptes)
@@ -50,6 +50,8 @@ namespace ProjetAppWCF_Interface2037
                     reponseRepresentation = lesMimesAcceptes[iMime].ToLower();
                     accordNegociation = true;
                 }
+
+                iMime++;
             }
 
             if (!accordNegociation)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -131,17 +132,17 @@ namespace ProjetAppWCF_Interface2037
                     chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));
                     break;
                 case "text/plain": // Représentation text brut
-                    chaineReponseBuilded.Append(GetTextPlainRessource(laRessource));
+                    chaineReponseBuilded.Append(SerialiserRessourceToTextPlain(laRessource));
                     break;
                 case "text/xml": // représentation XML
                     xs = GetXmlSerialiserRessource(laRessource);
                     SerialiserRessourceXml(laRessource, ref chaineReponseBuilded, xs);
                     break;
                 case "text/json": // représentation XML
-                    chaineReponseBuilded.Append(SerialiserRessourceJson(laRessource));
+                    chaineReponseBuilded.Append(SerialiserRessourceToJson(laRessource));
                     break;
                 case "text/csv":
-                    chaineReponseBuilded.Append(GetTextCsvRessource(laRessource, "\"","|"));
+                    chaineReponseBuilded.Append(SerialiserRessourceToTextCsv(laRessource, "\"","|"));
                     break;
                 default: // Représentation text brut
                     chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));
@@ -151,7 +152,7 @@ namespace ProjetAppWCF_Interface2037
             return chaineReponseBuilded.ToString();
         }
 
-        public static string GetTextPlainRessource(IRessource laRessource)
+        public static string SerialiserRessourceToTextPlain(IRessource laRessource)
         {
             StringBuilder monTextePlain = new StringBuilder();
 
@@ -161,13 +162,13 @@ namespace ProjetAppWCF_Interface2037
             {
                 Question uneQuestion = (Question)laRessource;
 
-                monTextePlain.Append(string.Format("{0} {1} {2}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien));
+                monTextePlain.Append(string.Format("{0} {1} {2} {3}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien));
             }
 
             return monTextePlain.ToString();
         }
 
-        public static string GetTextCsvRessource(IRessource laRessource, string delimiteur, string separateur)
+        public static string SerialiserRessourceToTextCsv(IRessource laRessource, string delimiteur, string separateur)
         {
             StringBuilder monTextePlain = new StringBuilder();
 
@@ -188,11 +189,11 @@ namespace ProjetAppWCF_Interface2037
             return monTextePlain.ToString();
         }
 
-        public static string GetTextCsvRessource(IRessource laRessource, string delimiteur, string separateur)
+        public static string SerialiserRessourceToJson(IRessource laRessource)
         {
             StringBuilder monTextePlain = new StringBuilder();
 
-            
+            monTextePlain.AppendLine(JsonConvert.SerializeObject(laRessource));
 
             return monTextePlain.ToString();
         }

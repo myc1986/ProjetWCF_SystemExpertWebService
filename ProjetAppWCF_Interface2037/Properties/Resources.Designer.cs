@@ -87,48 +87,5 @@ namespace ProjetAppWCF_Interface2037.Properties {
                 return ResourceManager.GetString("bdd_service_web", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Byte[].
-        /// </summary>
-        internal static byte[] Newtonsoft_Json {
-            get {
-                object obj = ResourceManager.GetObject("Newtonsoft_Json", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Byte[].
-        /// </summary>
-        internal static byte[] Newtonsoft_Json1 {
-            get {
-                object obj = ResourceManager.GetObject("Newtonsoft_Json1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;?xml version=&quot;1.0&quot;?&gt;
-        ///&lt;doc&gt;
-        ///    &lt;assembly&gt;
-        ///        &lt;name&gt;Newtonsoft.Json&lt;/name&gt;
-        ///    &lt;/assembly&gt;
-        ///    &lt;members&gt;
-        ///        &lt;member name=&quot;T:Newtonsoft.Json.Bson.BsonObjectId&quot;&gt;
-        ///            &lt;summary&gt;
-        ///            Represents a BSON Oid (object id).
-        ///            &lt;/summary&gt;
-        ///        &lt;/member&gt;
-        ///        &lt;member name=&quot;M:Newtonsoft.Json.Bson.BsonObjectId.#ctor(System.Byte[])&quot;&gt;
-        ///            &lt;summary&gt;
-        ///            Initializes a new instance of the &lt;see cref=&quot;T:Newtonsoft.Json.Bson.BsonObjectId&quot;/&gt; class.
-        ///             [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        internal static string Newtonsoft_Json2 {
-            get {
-                return ResourceManager.GetString("Newtonsoft_Json2", resourceCulture);
-            }
-        }
     }
 }

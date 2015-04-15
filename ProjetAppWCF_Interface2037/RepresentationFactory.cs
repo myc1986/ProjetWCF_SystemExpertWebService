@@ -180,7 +180,7 @@ namespace ProjetAppWCF_Interface2037
                 Question uneQuestion = (Question)laRessource;
 
                 mesEntetes = mesEntetes + string.Format("{5}{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", "Identifiant sous-ressource", "Nom de la sous-ressource", "Contenu de la sous-ressource", "Lien de la sous-ressource", delimiteur, separateur);
-                mesDonnees = mesEntetes + string.Format("{5}{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien, delimiteur, separateur);
+                mesDonnees = mesDonnees + string.Format("{5}{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien, delimiteur, separateur);
             }
 
             monTextePlain.AppendLine(mesEntetes);

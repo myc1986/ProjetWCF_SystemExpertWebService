@@ -84,7 +84,7 @@ namespace ProjetAppWCF_Interface2037
             //Gestion cache à faire
 
             EntiteQuestion myEntity = new EntiteQuestion();
-            myEntity.Contenu = context.Request.Params.Get("question_contenu").ToString();
+            myEntity.Contenu = context.Request["question_contenu"].ToString();
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
@@ -108,7 +108,7 @@ namespace ProjetAppWCF_Interface2037
             
             int val = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("question_id"), out val))
+            if (!int.TryParse(context.Request["question_id"], out val))
             {
                 //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                 //ManagerHeader.ModifierEntete("CodeStatus", "400");
@@ -156,7 +156,7 @@ namespace ProjetAppWCF_Interface2037
 
         public override void Supprimer(HttpContext context)
         {
-            if (String.IsNullOrEmpty(context.Request.Params.Get("question_id").ToString()))
+            if (String.IsNullOrEmpty(context.Request["question_id"]))
             {
                 HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
@@ -164,7 +164,7 @@ namespace ProjetAppWCF_Interface2037
 
             int val = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("question_id").ToString(), out val))
+            if (!int.TryParse(context.Request["question_id"], out val))
             {
                 HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
@@ -179,12 +179,12 @@ namespace ProjetAppWCF_Interface2037
                     if (uneQuestion != null)
                     {
                         _maQuestion = uneQuestion;
-                        _maQuestion.Contenu = context.Request.Params.Get("question_contenu").ToString();
+                        _maQuestion.Contenu = context.Request["question_contenu"];
                     }
                     else
                     {
-                        HttpContext.Current.Response.StatusCode = 400;
-                        throw new HttpException(404, string.Format("La question n°{0} n'existe pas.", val));
+                        HttpContext.Current.Response.StatusCode = 412;
+                        throw new HttpException(412, string.Format("La question n°{0} n'existe pas.", val));
                     }
 
                     bdd.questions.Remove(_maQuestion);

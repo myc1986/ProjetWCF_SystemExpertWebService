@@ -23,6 +23,7 @@ namespace ProjetAppWCF_Interface2037
 
         public void ProcessRequest(HttpContext context)
         {
+            string reponse = "";
             try
             {
                 IRessource maRessource = RessourceFactory.Fabriquer(context);
@@ -45,7 +46,9 @@ namespace ProjetAppWCF_Interface2037
                         break;
                 }
 
-                context.Response.Write(maRessource.GetString());
+                reponse = maRessource.GetString();
+                context.Response.Write(reponse);
+                
             }
             catch (Exception e)
             {
@@ -53,12 +56,13 @@ namespace ProjetAppWCF_Interface2037
             }
             finally
             {
-                HttpContext.Current.Response.Cache.SetVaryByCustom(string.Format("AllParams=[{0}];AllFormParams=[{1}]", HttpContext.Current.Request.Params, HttpContext.Current.Request.Form));
+                HttpContext.Current.Response.Cache.SetVaryByCustom(string.Format("AllParams=[{0}];AllFormParams=[{1}]reponse=[{2}]", HttpContext.Current.Request.Params, HttpContext.Current.Request.Form, reponse));
                 HttpContext.Current.Response.Cache.SetValidUntilExpires(false);
                 HttpContext.Current.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
                 HttpContext.Current.Response.Cache.SetExpires(DateTime.UtcNow);
                 HttpContext.Current.Response.Cache.SetLastModified(DateTime.UtcNow);
                 HttpContext.Current.Response.Cache.SetETagFromFileDependencies();
+                HttpContext.Current.Response.AppendHeader("Content-Length", reponse.Length.ToString());
             }
         }
     }

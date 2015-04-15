@@ -60,7 +60,17 @@ namespace ProjetAppWCF_Interface2037
                 throw new HttpException(415, string.Format("Format de représentation demandé non supporté."));
             }
 
+            AppliquerRepresentationNegocier(reponseRepresentation);
+
             return reponseRepresentation;
+        }
+
+        private static void AppliquerRepresentationNegocier(string reponseRepresentation)
+        {
+            foreach (var mime in _mesMimes)
+            {
+                HttpContext.Current.Response.ContentType = HttpContext.Current.Response.ContentType.Replace(mime, reponseRepresentation);
+            }
         }
     }
 }

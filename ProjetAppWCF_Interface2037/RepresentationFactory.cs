@@ -171,7 +171,6 @@ namespace ProjetAppWCF_Interface2037
         {
             StringBuilder monTextePlain = new StringBuilder();
 
-            
             string mesEntetes = string.Format("{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", "Identifiant ressource", "Nom de la ressource", "Contenu de la ressource", "Lien de la ressource", delimiteur, separateur);
             string mesDonnees = string.Format("{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", laRessource.GetId(), laRessource.GetNameClass(), laRessource.GetContenu(), laRessource.Lien, delimiteur, separateur);
 
@@ -185,6 +184,15 @@ namespace ProjetAppWCF_Interface2037
 
             monTextePlain.AppendLine(mesEntetes);
             monTextePlain.AppendLine(mesDonnees);
+
+            return monTextePlain.ToString();
+        }
+
+        public static string GetTextCsvRessource(IRessource laRessource, string delimiteur, string separateur)
+        {
+            StringBuilder monTextePlain = new StringBuilder();
+
+            
 
             return monTextePlain.ToString();
         }

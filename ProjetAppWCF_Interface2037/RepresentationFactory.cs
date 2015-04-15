@@ -125,12 +125,14 @@ namespace ProjetAppWCF_Interface2037
                 return string.Format("1", laRessource.GetNameClass());
             }
 
-            switch (NegociationRepresentation.NegocierRepresentation(leContext.Request.AcceptTypes))
+            switch(NegociationRepresentation.NegocierRepresentation(leContext.Request.AcceptTypes))
             {
                 case "text/html": // Représentation HTML
                     chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));
                     break;
                 case "text/plain": // Représentation text brut
+                    chaineReponseBuilded.Append(GetTextPlainRessource(laRessource));
+                    break;
                 case "text/xml": // représentation XML
                     xs = GetXmlSerialiserRessource(laRessource);
                     SerialiserRessourceXml(laRessource, ref chaineReponseBuilded, xs);
@@ -138,12 +140,47 @@ namespace ProjetAppWCF_Interface2037
                 case "text/json": // représentation XML
                     chaineReponseBuilded.Append(SerialiserRessourceJson(laRessource));
                     break;
+                case "text/csv":
+                    chaineReponseBuilded.Append(GetTextCsvRessource(laRessource, "\"","|"));
+                    break;
                 default: // Représentation text brut
                     chaineReponseBuilded.Append(GetHtmlSerialiserRessource(laRessource));
                     break;
             }
 
             return chaineReponseBuilded.ToString();
+        }
+
+        public static string GetTextPlainRessource(IRessource laRessource)
+        {
+            StringBuilder monTextePlain = new StringBuilder();
+
+            monTextePlain.Append(string.Format("{0} {1} {2} {3}", laRessource.GetId(), laRessource.GetNameClass(), laRessource.GetContenu(),laRessource.Lien));
+
+            if (laRessource.GetNameClass() == "Question")
+            {
+                Question uneQuestion = (Question)laRessource;
+
+                monTextePlain.Append(string.Format("{0} {1} {2}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien));
+            }
+
+            return monTextePlain.ToString();
+        }
+
+        public static string GetTextCsvRessource(IRessource laRessource, string delimiteur, string separateur)
+        {
+            StringBuilder monTextePlain = new StringBuilder();
+
+            monTextePlain.Append(string.Format("{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", laRessource.GetId(), laRessource.GetNameClass(), laRessource.GetContenu(), laRessource.Lien, delimiteur, separateur));
+
+            if (laRessource.GetNameClass() == "Question")
+            {
+                Question uneQuestion = (Question)laRessource;
+
+                monTextePlain.Append(string.Format("{5}{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien, delimiteur, separateur));
+            }
+
+            return monTextePlain.ToString();
         }
     }
 }

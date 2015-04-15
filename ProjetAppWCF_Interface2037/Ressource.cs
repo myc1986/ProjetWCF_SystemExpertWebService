@@ -40,7 +40,7 @@ namespace ProjetAppWCF_Interface2037
         {
             get 
             { 
-                return string.Format("http://{3}:{4}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+                return string.Format("http://{3}:{4}/{5}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port, HttpContext.Current.Request.ApplicationPath);
             }
         }
     }

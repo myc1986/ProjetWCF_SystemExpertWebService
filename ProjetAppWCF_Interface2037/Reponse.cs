@@ -52,16 +52,19 @@ namespace ProjetAppWCF_Interface2037
         {
             if (!context.Request.Form.AllKeys.Contains("question_fid"))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Dans votre formlaire, vous n'avez de champ dont l'identifiant est '{0}'.", "question_fid"));
             }
 
             if (!context.Request.Form.AllKeys.Contains("reponse_contenu"))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Dans votre formlaire, vous n'avez de champ dont l'identifiant est '{0}'.", "reponse_contenu"));
             }
 
             if (String.IsNullOrEmpty(context.Request["question_fid"]))
 	        {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant.", "question_fid"));
 	        }
 
@@ -69,6 +72,7 @@ namespace ProjetAppWCF_Interface2037
 
             if (!int.TryParse(context.Request["question_fid"], out val_question_fid))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier.", "question_fid"));
             }
 
@@ -91,11 +95,13 @@ namespace ProjetAppWCF_Interface2037
                     {
                         if (uneQuestion.reponses.Count > 0)
                         {
+                            HttpContext.Current.Response.StatusCode = 400;
                             throw new HttpException(400, string.Format("{0} : Une réponse existe déjà pour cette question n°{1}. Réponse présente : {2}.\nSi vous souhaitez mettre à jour la réponse à la question, merci de consulter la documentation pour une mise à jour de la réponse.", "question_fid", val_question_fid, uneQuestion.reponses.First().Contenu));
                         }
                     }
                     else
                     {
+                        HttpContext.Current.Response.StatusCode = 404;
                         throw new HttpException(404, string.Format("{0} : La quesion n°{1} n'existe pas.", "question_fid", val_question_fid));
                     }
 
@@ -172,7 +178,7 @@ namespace ProjetAppWCF_Interface2037
                         else
                         {
                             _maReponse = new EntiteReponse();
-
+                            HttpContext.Current.Response.StatusCode = 404;
                             throw new Exception(messageException.ToString());
                         }
                     }
@@ -180,6 +186,7 @@ namespace ProjetAppWCF_Interface2037
                     {
                         _maReponse = new EntiteReponse();
 
+                        HttpContext.Current.Response.StatusCode = 400;
                         throw new Exception(messageException.ToString());
                     }
                 }
@@ -208,6 +215,7 @@ namespace ProjetAppWCF_Interface2037
 
                 if (uneReponse == null)
                 {
+                    HttpContext.Current.Response.StatusCode = 400;
                     throw new HttpException(messageException.ToString());
                 }
 
@@ -298,11 +306,13 @@ namespace ProjetAppWCF_Interface2037
                             }
                             else
                             {
+                                HttpContext.Current.Response.StatusCode = 304;
                                 throw new HttpException(304, string.Format("{0} : La ressource doit être créer avant d'être mise à jour. Consulter la documentation pour créer la ressource.", "reponse_id", val));
                             }
                         }
                         else
                         {
+                            HttpContext.Current.Response.StatusCode = 404;
                             throw new HttpException(404, string.Format("{0} : La question n°{1} associé à cette ressource n'existe pas.", "reponse_id", val));
                         }
                     }
@@ -323,11 +333,13 @@ namespace ProjetAppWCF_Interface2037
                             }
                             else
                             {
+                                HttpContext.Current.Response.StatusCode = 404;
                                 throw new HttpException(404, string.Format("{0} : L'identifiant réponse n°{1} n'existe pas.", "reponse_id", valIdReponse));
                             }
                         }
                         else
                         {
+                            HttpContext.Current.Response.StatusCode = 404;
                             throw new HttpException(404, string.Format("{0} : Dans votre formulaire, vous devez avoir un champ dont l'identifiant est '{0}' et la valeur doit être un entier. Valeur saisie : '{1}'", "reponse_id", valIdReponse));
                         }
                     }
@@ -380,12 +392,12 @@ namespace ProjetAppWCF_Interface2037
                     return "";
                 }
 
-                return string.Format("http://{3}:{4}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+                return string.Format("http://{3}:{4}/{5}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port, HttpContext.Current.Request.ApplicationPath);
             }
 
             set
             {
-                _lienRessource = string.Format("http://{3}:{4}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+                _lienRessource = string.Format("http://{3}:{4}/{5}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port, HttpContext.Current.Request.ApplicationPath);
             }
         }
     }

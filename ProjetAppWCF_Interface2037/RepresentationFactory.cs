@@ -171,14 +171,20 @@ namespace ProjetAppWCF_Interface2037
         {
             StringBuilder monTextePlain = new StringBuilder();
 
-            monTextePlain.Append(string.Format("{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", laRessource.GetId(), laRessource.GetNameClass(), laRessource.GetContenu(), laRessource.Lien, delimiteur, separateur));
+            
+            string mesEntetes = string.Format("{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", "Identifiant ressource", "Nom de la ressource", "Contenu de la ressource", "Lien de la ressource", delimiteur, separateur);
+            string mesDonnees = string.Format("{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", laRessource.GetId(), laRessource.GetNameClass(), laRessource.GetContenu(), laRessource.Lien, delimiteur, separateur);
 
             if (laRessource.GetNameClass() == "Question")
             {
                 Question uneQuestion = (Question)laRessource;
 
-                monTextePlain.Append(string.Format("{5}{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien, delimiteur, separateur));
+                mesEntetes = mesEntetes + string.Format("{5}{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", "Identifiant sous-ressource", "Nom de la sous-ressource", "Contenu de la sous-ressource", "Lien de la sous-ressource", delimiteur, separateur);
+                mesDonnees = mesEntetes + string.Format("{5}{4}{0}{4}{5}{4}{1}{4}{5}{4}{2}{4}{5}{4}{3}{4}", uneQuestion.ReponseString.GetId(), uneQuestion.ReponseString.GetNameClass(), uneQuestion.ReponseString.GetContenu(), uneQuestion.ReponseString.Lien, delimiteur, separateur);
             }
+
+            monTextePlain.AppendLine(mesEntetes);
+            monTextePlain.AppendLine(mesDonnees);
 
             return monTextePlain.ToString();
         }

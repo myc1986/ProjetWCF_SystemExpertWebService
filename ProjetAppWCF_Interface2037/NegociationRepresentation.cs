@@ -16,6 +16,7 @@ namespace ProjetAppWCF_Interface2037
             _mesMimes.Add("text/html");
             _mesMimes.Add("text/xml");
             _mesMimes.Add("text/plain");
+            _mesMimes.Add("text/csv");
         }
 
         public static List<string> MimesSupportes

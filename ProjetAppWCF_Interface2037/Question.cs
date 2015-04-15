@@ -61,6 +61,7 @@ namespace ProjetAppWCF_Interface2037
                 }
                 else
                 {
+                    HttpContext.Current.Response.StatusCode = 404;
                     throw new Exception(string.Format("{0} : cet identifiant n'existe pas. Détail :\n{1}", id));
                 }
             }
@@ -76,6 +77,7 @@ namespace ProjetAppWCF_Interface2037
 
             if (String.IsNullOrEmpty(context.Request["question_contenu"]))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "question_contenu"));
             }
 
@@ -100,6 +102,7 @@ namespace ProjetAppWCF_Interface2037
             {
                 //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                 //ManagerHeader.ModifierEntete("CodeStatus", "400");
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
             }
             
@@ -109,6 +112,7 @@ namespace ProjetAppWCF_Interface2037
             {
                 //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                 //ManagerHeader.ModifierEntete("CodeStatus", "400");
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
@@ -136,7 +140,7 @@ namespace ProjetAppWCF_Interface2037
                     {
                         //ManagerHeader.ModifierEntete("Content-type", HttpContext.Current.Request.ContentType);
                         //ManagerHeader.ModifierEntete("CodeStatus", "400");
-
+                        HttpContext.Current.Response.StatusCode = 404;
                         throw new HttpException(404, string.Format("La question N°{0} n'existe pas.", val));
                     } 
                 }
@@ -154,6 +158,7 @@ namespace ProjetAppWCF_Interface2037
         {
             if (String.IsNullOrEmpty(context.Request.Params.Get("question_id").ToString()))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
             }
 
@@ -161,6 +166,7 @@ namespace ProjetAppWCF_Interface2037
 
             if (!int.TryParse(context.Request.Params.Get("question_id").ToString(), out val))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
@@ -177,6 +183,7 @@ namespace ProjetAppWCF_Interface2037
                     }
                     else
                     {
+                        HttpContext.Current.Response.StatusCode = 400;
                         throw new HttpException(404, string.Format("La question n°{0} n'existe pas.", val));
                     }
 
@@ -189,7 +196,6 @@ namespace ProjetAppWCF_Interface2037
                 {
                     //ManagerHeader.ModifierEntete("Content-Type", HttpContext.Current.Request.ContentType);
                     //ManagerHeader.ModifierEntete("status", "400");
-
                     throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
                 } 
             }
@@ -199,21 +205,25 @@ namespace ProjetAppWCF_Interface2037
         {
             if (!context.Request.Form.AllKeys.Contains("question_id"))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_id"));
             }
 
             if (String.IsNullOrEmpty(context.Request["question_id"]))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
             }
 
             if (!context.Request.Form.AllKeys.Contains("question_contenu"))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_contenu"));
             }
 
             if (String.IsNullOrEmpty(context.Request["question_contenu"]))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "question_contenu"));
             }
 
@@ -221,6 +231,7 @@ namespace ProjetAppWCF_Interface2037
 
             if (!int.TryParse(context.Request["question_id"], out val))
             {
+                HttpContext.Current.Response.StatusCode = 400;
                 throw new HttpException(400, string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
@@ -231,6 +242,7 @@ namespace ProjetAppWCF_Interface2037
             {
                 if (String.IsNullOrEmpty(context.Request["reponse_contenu"]))
                 {
+                    HttpContext.Current.Response.StatusCode = 400;
                     throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "reponse_contenu"));
                 }
 
@@ -264,24 +276,26 @@ namespace ProjetAppWCF_Interface2037
                                     uneReponse.question_fid = val;
                                     bdd.reponses.Add(uneReponse);
                                     bdd.SaveChanges();
-
-                                    _maReponse.Consulter(context);
                                 }
                             }
+
+                            _maReponse.Consulter(context);
                         }
                         else
                         {
+                            HttpContext.Current.Response.StatusCode = 404;
                             throw new HttpException(404, string.Format("{0} : La question n°{0} n'existe pas.", val));
                         }
                     }
                     else
                     {
+                        HttpContext.Current.Response.StatusCode = 404;
                         throw new HttpException(404, string.Format("{0} : La question n°{1} n'existe pas.", "question_id", val));
                     }
                 }
                 catch (Exception e)
                 {
-                    throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
+                    throw new HttpException(HttpContext.Current.Response.StatusCode, string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
                 }
             }
         }
@@ -348,12 +362,12 @@ namespace ProjetAppWCF_Interface2037
                     return "";
                 }
 
-                return string.Format("http://{3}:{4}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+                return string.Format("http://{3}:{4}/{5}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port, HttpContext.Current.Request.ApplicationPath);
             }
 
             set
             {
-                _lienRessource = string.Format("http://{3}:{4}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port);
+                _lienRessource = string.Format("http://{3}:{4}/{5}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port, HttpContext.Current.Request.ApplicationPath);
             }
         }
     }

@@ -32,6 +32,7 @@ namespace ProjetAppWCF_Interface2037
         {
             _maReponse = new EntiteReponse();
             _nameChampId = "reponse_id";
+            _lienRessourceNext = "";
         }
 
         public Reponse(HttpContext context)
@@ -39,6 +40,7 @@ namespace ProjetAppWCF_Interface2037
             _maReponse = new EntiteReponse();
             _monContextHttp = context;
             _nameChampId = "reponse_id";
+            _lienRessourceNext = "";
         }
 
         public Reponse(string id, HttpContext context)
@@ -46,6 +48,7 @@ namespace ProjetAppWCF_Interface2037
             _maReponse = new EntiteReponse();
             _monContextHttp = context;
             _nameChampId = "reponse_id";
+            _lienRessourceNext = "";
         }
 
         public override void Creer(System.Web.HttpContext context)

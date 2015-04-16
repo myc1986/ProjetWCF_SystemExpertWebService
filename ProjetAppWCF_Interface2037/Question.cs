@@ -37,6 +37,7 @@ namespace ProjetAppWCF_Interface2037
         {
             _maQuestion = new EntiteQuestion();
             _nameChampId = "question_id";
+            _lienRessourceNext = "";
         }
 
         public Question(HttpContext context)
@@ -45,6 +46,7 @@ namespace ProjetAppWCF_Interface2037
             _maReponse = new Reponse(context);
             _monContextHttp = context;
             _nameChampId = "question_id";
+            _lienRessourceNext = "";
         }
 
         public Question(int id, HttpContext context)
@@ -54,6 +56,19 @@ namespace ProjetAppWCF_Interface2037
             using (bdd_service_web bdd = new bdd_service_web())
             {
                 var uneQuestion = bdd.questions.Where(pp => pp.Id == id).FirstOrDefault();
+                var lesQuestions = bdd.questions.OrderBy(pp => pp.Id).ToList();
+                EntiteQuestion nextQuest = new EntiteQuestion();
+
+                foreach (var item in lesQuestions)
+                {
+                    if (item.Id != uneQuestion.Id)
+                    {
+                        if (item.reponses.Count < 1)
+                        {
+                            nextQuest = item;
+                        }
+                    }
+                }
 
                 if (uneQuestion != null)
                 {
@@ -64,9 +79,12 @@ namespace ProjetAppWCF_Interface2037
                     HttpContext.Current.Response.StatusCode = 404;
                     throw new Exception(string.Format("{0} : cet identifiant n'existe pas. Détail :\n{1}", id));
                 }
+
+                //_lienRessourceNext = GetLienRessourceNext(context, bdd, _maQuestion);
             }
 
             _nameChampId = "question_id";
+            _lienRessourceNext = "";
         }
 
         public override void Creer(HttpContext context)
@@ -92,6 +110,7 @@ namespace ProjetAppWCF_Interface2037
                 bdd.SaveChanges();
                 _maQuestion = myEntity;
 
+                _lienRessourceNext = GetLienRessourceNext(context, bdd, _maQuestion);
                 ManagerHeader.AjouterCodeHeaderReponse(201, this);
             }
         }
@@ -121,7 +140,7 @@ namespace ProjetAppWCF_Interface2037
                 try
                 {
                     var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
-                    
+                   
                     if (uneQuestion != null)
                     {
                         _maQuestion = uneQuestion;
@@ -142,7 +161,9 @@ namespace ProjetAppWCF_Interface2037
                         //ManagerHeader.ModifierEntete("CodeStatus", "400");
                         HttpContext.Current.Response.StatusCode = 404;
                         throw new HttpException(404, string.Format("La question N°{0} n'existe pas.", val));
-                    } 
+                    }
+
+                    _lienRessourceNext = GetLienRessourceNext(context, bdd, uneQuestion);
                 }
                 catch (Exception e)
                 {
@@ -152,6 +173,38 @@ namespace ProjetAppWCF_Interface2037
                     throw new HttpException(e.GetHashCode(), string.Format("<h2>Question N°{0}</h2><p>Détail: {1}</p>", val, e.Message));
                 }               
             }
+        }
+
+        private string GetLienRessourceNext(HttpContext context, bdd_service_web bdd, EntiteQuestion uneQuestion)
+        {
+            string urlRessourceNext;
+
+            var lesQuestions = bdd.questions.OrderBy(pp => pp.Id).ToList();
+            EntiteQuestion nextQuest = new EntiteQuestion();
+
+            foreach (var item in lesQuestions)
+            {
+                if (item.Id != uneQuestion.Id)
+                {
+                    if (item.reponses.Count < 1)
+                    {
+                        nextQuest = item;
+                    }
+                }
+            }
+
+            if (nextQuest != null)
+            {
+                Ressource maRessource = new Question(nextQuest.Id, context);
+
+                urlRessourceNext = string.Format("http://{3}:{4}/{5}/{0}?{1}={2}", maRessource.GetNameClass(), maRessource.NameChampId, maRessource.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port, HttpContext.Current.Request.ApplicationPath.Remove(0, 1));
+            }
+            else
+            {
+                urlRessourceNext = "";
+            }
+
+            return urlRessourceNext;
         }
 
         public override void Supprimer(HttpContext context)
@@ -292,6 +345,8 @@ namespace ProjetAppWCF_Interface2037
                         HttpContext.Current.Response.StatusCode = 404;
                         throw new HttpException(404, string.Format("{0} : La question n°{1} n'existe pas.", "question_id", val));
                     }
+
+                    _lienRessourceNext = GetLienRessourceNext(context, bdd, _maQuestion);
                 }
                 catch (Exception e)
                 {
@@ -369,6 +424,15 @@ namespace ProjetAppWCF_Interface2037
             {
                 _lienRessource = string.Format("http://{3}:{4}/{5}/{0}?{1}={2}", this.GetNameClass(), this.NameChampId, this.GetId(), HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port, HttpContext.Current.Request.ApplicationPath.Remove(0,1));
             }
+        }
+
+        public string LienRessourceNext { 
+            get {
+
+                return _lienRessourceNext;
+            } 
+            set { 
+            } 
         }
     }
 }

@@ -121,10 +121,10 @@ namespace ProjetAppWCF_Interface2037
             StringBuilder chaineReponseBuilded = new StringBuilder();
             XmlSerializer xs;
 
-            if (string.IsNullOrEmpty(laRessource.GetId()))
-            {
-                return string.Format("1", laRessource.GetNameClass());
-            }
+            //if (string.IsNullOrEmpty(laRessource.GetId()))
+            //{
+            //    return string.Format("1", laRessource.GetNameClass());
+            //}
 
             switch(NegociationRepresentation.NegocierRepresentation(leContext.Request.AcceptTypes))
             {

@@ -182,13 +182,16 @@ namespace ProjetAppWCF_Interface2037
             var lesQuestions = bdd.questions.OrderBy(pp => pp.Id).ToList();
             EntiteQuestion nextQuest = new EntiteQuestion();
 
-            foreach (var item in lesQuestions)
+            int iQuestion = 0;
+            bool aucuneQuestionTrouveSansReponse = true;
+
+            while (iQuestion < lesQuestions.Count && aucuneQuestionTrouveSansReponse)
             {
-                if (item.Id != uneQuestion.Id)
+                if (lesQuestions[iQuestion].Id != uneQuestion.Id)
                 {
-                    if (item.reponses.Count < 1)
+                    if (lesQuestions[iQuestion].reponses.Count < 1)
                     {
-                        nextQuest = item;
+                        nextQuest = lesQuestions[iQuestion];
                     }
                 }
             }
@@ -256,11 +259,11 @@ namespace ProjetAppWCF_Interface2037
 
         public override void MiseAJour(HttpContext context)
         {
-            if (!context.Request.Form.AllKeys.Contains("question_id"))
-            {
-                HttpContext.Current.Response.StatusCode = 400;
-                throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_id"));
-            }
+            //if (!context.Request.Form.AllKeys.Contains("question_id"))
+            //{
+            //    HttpContext.Current.Response.StatusCode = 400;
+            //    throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_id"));
+            //}
 
             if (String.IsNullOrEmpty(context.Request["question_id"]))
             {
@@ -268,11 +271,11 @@ namespace ProjetAppWCF_Interface2037
                 throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi d'identifiant", "question_id"));
             }
 
-            if (!context.Request.Form.AllKeys.Contains("question_contenu"))
-            {
-                HttpContext.Current.Response.StatusCode = 400;
-                throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_contenu"));
-            }
+            //if (!context.Request.Form.AllKeys.Contains("question_contenu"))
+            //{
+            //    HttpContext.Current.Response.StatusCode = 400;
+            //    throw new HttpException(400, string.Format("{0} : Dans votre formulaire, vous n'avez pas de champ dont l'identifiant est '{0}'.", "question_contenu"));
+            //}
 
             if (String.IsNullOrEmpty(context.Request["question_contenu"]))
             {
@@ -291,14 +294,13 @@ namespace ProjetAppWCF_Interface2037
             string contenuQuestion = context.Request["question_contenu"];
             string contenuReponse = "";
 
-            if (context.Request.Form.AllKeys.Contains("reponse_contenu"))
+            if (String.IsNullOrEmpty(context.Request["reponse_contenu"]))
             {
-                if (String.IsNullOrEmpty(context.Request["reponse_contenu"]))
-                {
-                    HttpContext.Current.Response.StatusCode = 400;
-                    throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "reponse_contenu"));
-                }
-
+                HttpContext.Current.Response.StatusCode = 400;
+                throw new HttpException(400, string.Format("{0} : Vous n'avez pas saisi de contenu", "reponse_contenu"));
+            }
+            else
+            {
                 contenuReponse = context.Request["reponse_contenu"];
             }
 

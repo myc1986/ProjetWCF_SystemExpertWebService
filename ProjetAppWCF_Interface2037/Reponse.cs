@@ -152,7 +152,23 @@ namespace ProjetAppWCF_Interface2037
 
             using (bdd_service_web bdd = new bdd_service_web())
             {
-                if (val > 0)
+                if (val >= 1)
+                {
+                    var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
+
+                    if (uneQuestion != null)
+                    {
+                        if (uneQuestion.reponses.Count > 0)
+                        {
+                            _maReponse = uneQuestion.reponses.First();
+                        }
+                        else
+                        {
+                            _maReponse = new EntiteReponse();
+                        }
+                    }
+                }
+                else if(val == 0)
                 {
                     var uneQuestion = bdd.questions.Where(pp => pp.Id == val).FirstOrDefault();
 
@@ -170,7 +186,7 @@ namespace ProjetAppWCF_Interface2037
                 }
                 else
                 {
-                    if (valIdReponse > 0)
+                    if (valIdReponse >= 1)
                     {
                         var uneReponse = bdd.reponses.Where(pp => pp.Id == valIdReponse).FirstOrDefault();
 

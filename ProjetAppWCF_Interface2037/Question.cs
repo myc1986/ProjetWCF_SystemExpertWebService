@@ -192,8 +192,11 @@ namespace ProjetAppWCF_Interface2037
                     if (lesQuestions[iQuestion].reponses.Count < 1)
                     {
                         nextQuest = lesQuestions[iQuestion];
+                        aucuneQuestionTrouveSansReponse = false;
                     }
                 }
+
+                iQuestion++;
             }
 
             if (nextQuest != null)

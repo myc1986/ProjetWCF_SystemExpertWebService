@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 31 Mars 2015 à 16:53
+-- Généré le :  Ven 17 Avril 2015 à 03:27
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -47,15 +47,14 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `question_id` int(11) NOT NULL AUTO_INCREMENT,
   `question_contenu` varchar(500) NOT NULL,
   PRIMARY KEY (`question_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=52 ;
 
 --
 -- Contenu de la table `questions`
 --
 
 INSERT INTO `questions` (`question_id`, `question_contenu`) VALUES
-(1, 'Comment installe-on windows XP 32 bits ?'),
-(2, '');
+(0, 'Question d''initialisation ?');
 
 -- --------------------------------------------------------
 
@@ -69,14 +68,14 @@ CREATE TABLE IF NOT EXISTS `reponses` (
   `question_fid` int(11) NOT NULL,
   PRIMARY KEY (`reponse_id`),
   KEY `question_fid` (`question_fid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Contenu de la table `reponses`
 --
 
 INSERT INTO `reponses` (`reponse_id`, `reponse_contenu`, `question_fid`) VALUES
-(1, 'Tu te débrouilles....', 1);
+(0, 'Réponse initialse', 0);
 
 --
 -- Contraintes pour les tables exportées

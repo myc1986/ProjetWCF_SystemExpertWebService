@@ -126,26 +126,16 @@ namespace ProjetAppWCF_Interface2037
         {
             StringBuilder messageException = new StringBuilder();
 
-            if (!context.Request.Params.AllKeys.Contains("question_id"))
-            {
-                messageException.AppendLine(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "question_id"));
-            }
-
             int val = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("question_id"), out val))
+            if (!int.TryParse(context.Request["question_id"], out val))
             {
                 messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "question_id"));
             }
 
-            if (!context.Request.Params.AllKeys.Contains("reponse_id"))
-            {
-                messageException.AppendLine(string.Format("{0} : Vous n'avez pas saisi de d'identifiant", "reponse_id"));
-            }
-
             int valIdReponse = 0;
 
-            if (!int.TryParse(context.Request.Params.Get("reponse_id"), out valIdReponse))
+            if (!int.TryParse(context.Request["reponse_id"], out valIdReponse))
             {
                 messageException.AppendLine(string.Format("{0} : Vous devez saisir un entier", "reponse_id"));
             }

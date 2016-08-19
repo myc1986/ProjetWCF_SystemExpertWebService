@@ -12,6 +12,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetAppWCF_Interface2037"
 EndProject
 Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "Modelisation", "Modelisation\Modelisation.modelproj", "{90D1B6C1-0A67-4C90-A199-955CD38BDDD5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{FA8209FA-B3AB-48B3-8D61-16098CC26AEE}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Downloads\config squid centos2.docx = ..\..\..\..\Downloads\config squid centos2.docx
+		..\..\..\..\Downloads\DocumentationProjetInterface2037.pdf = ..\..\..\..\Downloads\DocumentationProjetInterface2037.pdf
+		..\..\..\..\Downloads\Projet Interface 2037.pptx = ..\..\..\..\Downloads\Projet Interface 2037.pptx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
